@@ -10,23 +10,22 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
- * @author Viktor
+ * @author Viktor Krejčíř
  */
 public class AnimationControl {
+
     private ParallelTransition actualTransition;
-    ///               Ovl�d�n� Animace            ///
+
     private IntegerProperty nextTransition = new SimpleIntegerProperty(0);
     private ArrayList<ParallelTransition> transitions;
     private double rate;
     private boolean markedAsStepping;
     private LinkedList<AnimationEvent> finishedEvents;
 
-    // private AnimationDescription ad;
     public AnimationControl() {
         transitions = new ArrayList<>();
         markedAsStepping = false;
         finishedEvents = new LinkedList<>();
-        //      ad = AnimationDescription.getAnimationDescription();
     }
 
     public ArrayList<ParallelTransition> getTransitions() {
@@ -36,7 +35,6 @@ public class AnimationControl {
     public void addAnimationFinishedListener(AnimationEvent ae) {
         finishedEvents.add(ae);
     }
-
 
     public void togglePlaying() {
         if (actualTransition != null) {
@@ -49,47 +47,30 @@ public class AnimationControl {
         }
     }
 
-    /**
-     * krok zp�t
-     */
     public void goBack() {
         if (actualTransition.getStatus() == Animation.Status.RUNNING) {
-            return; // - animace b��, nep�esko��me
+            return;
         }
 
         if (nextTransition.get() == 0) {
             return;
         }
-        /*  
-        if(nextTransitionIndex == 0){
-            return;
-        }
-          */
         playBack();
 
     }
 
     /**
-     * Krok vp�ed, pokud jsme se vraceli nav�eme v dop�edn� animaci tam, kam jsme se vr�tili
+     * Krok vpřed, pokud jsme se vraceli naveme v dopředně animaci tam, kam jsme se vrátili
      */
     public void goForth() {
-
-
         if (actualTransition.getStatus() == Animation.Status.RUNNING) {
-            return; // - animace b��, nep�esko��me
+            return;
         }
+
         if (nextTransition.get() == transitions.size()) {
             return;
         }
-       /* 
-        if(nextTransitionIndex == transitions.size()-1){
-            return;
-        }
-        */
-        //  playNextTransition();
         playForward();
-
-
     }
 
     public void setRate(double rate) {
@@ -105,16 +86,11 @@ public class AnimationControl {
             @Override
             public void handle(ActionEvent t) {
                 nextTransition.set(nextTransition.get() + 1);
-/*            if(inserted){
-                
-            }*/
+
                 if (!markedAsStepping) {
                     if (nextTransition.get() < transitions.size()) {
-                        //   updateDescription(nextTransitionIndex);
                         playNextTransition();
-
                     } else {
-                        //nextTransitionIndex--;
                         animationFinished(true);
                     }
                 }
@@ -127,17 +103,12 @@ public class AnimationControl {
 
             @Override
             public void handle(ActionEvent t) {
-
                 if (!markedAsStepping) {
                     if (nextTransition.get() >= 0) {
-
                         playPrevTransition();
                     } else {
-
                         animationFinished(false);
                     }
-                } else {
-
                 }
                 nextTransition.set(nextTransition.get() - 1);
 
@@ -151,8 +122,6 @@ public class AnimationControl {
         setNodesToVisible(actualTransition);
         actualTransition.setOnFinished(createBackTransitionHandler());
         actualTransition.setRate(-1 * rate);
-        //   updateDescription(false);
-//     updateDescription(index);
         actualTransition.play();
     }
 
@@ -162,38 +131,15 @@ public class AnimationControl {
         setNodesToVisible(actualTransition);
         actualTransition.setOnFinished(createForwardTransitionHandler());
         actualTransition.setRate(1 * rate);
-        //    updateDescription(index);
-        //   updateDescription(true);
         actualTransition.play();
     }
 
     protected void animationFinished(boolean wentForward) {
         if (wentForward) {
-/*
-         if(hiding){
-            for(NodeViewBlock nvb:layMan.getCreatedBlocks()){
-                
-                int index = settings.drawingPane.getChildren().indexOf(nvb);
-                //settings.drawingPane.getChildren().get(index).disableProperty().set(false);
-                settings.drawingPane.getChildren().get(index).visibleProperty().set(true);
+            for (AnimationEvent ae : finishedEvents) {
+                ae.handle();
             }
-            hiding = false;
-            layMan.eraseCreatedBlocks();
-          }
-         
-         if(removing){
-             animationBlock.setVisible(false);
-             actualTransition = multipleMoveLeft(removingKey);
-             actualTransition.setRate(1);
-             actualTransition.play();
-             removing = false;
-         }
-            */
         }
-        for (AnimationEvent ae : finishedEvents) {
-            ae.handle();
-        }
-
     }
 
     public void markAsStepping(boolean stepping) {
@@ -206,7 +152,6 @@ public class AnimationControl {
         setNodesToVisible(actualTransition);
         actualTransition.setOnFinished(createBackTransitionHandler());
         actualTransition.setRate(-1 * rate);
-        //    updateDescription(index);
         actualTransition.play();
     }
 
@@ -216,11 +161,8 @@ public class AnimationControl {
         setNodesToVisible(actualTransition);
         actualTransition.setOnFinished(createForwardTransitionHandler());
         actualTransition.setRate(1 * rate);
-        //    updateDescription(index);
         actualTransition.play();
     }
-
-    ///-----------------------------------------///
 
     private void setNodesToVisible(ParallelTransition pt) {
         for (Animation a : pt.getChildren()) {
@@ -253,15 +195,5 @@ public class AnimationControl {
         transitions.clear();
         finishedEvents.clear();
     }
-/*
-    private void updateDescription(boolean forward) {
-        NodeViewBlock nvb = (NodeViewBlock) actualTransition.getNode();
-        if(forward){
-            
-            nvb.setText(ad.getNextDescription());
-        }else{
-            nvb.setText(ad.getPreviousDescription());
-        }
-    }
-     */
+
 }
