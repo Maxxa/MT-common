@@ -16,7 +16,7 @@ import javafx.util.Duration;
  * @author Martin Šára
  * @param <T> typ controlleru
  */
-public abstract class Graphics<T> {
+public abstract class Graphics<T> { //TODO
     
     /**
      * Vychozi velikost fontu v systemu respektujici aktualni DPI.
@@ -40,8 +40,6 @@ public abstract class Graphics<T> {
      * Standardni trvani jedne animace.
      */
     private static final Duration NORMAL_DURATION = Duration.seconds(1);
-    
-    
     
     /**
      * Reference na ridici tridu.
@@ -86,8 +84,6 @@ public abstract class Graphics<T> {
      */
     private Duration duration = NORMAL_DURATION;
 
-    
-    
     protected Graphics(Pane pane, ScrollPane scrollPane, T control) {
         this.control = control;
         this.pane = pane;
@@ -107,8 +103,6 @@ public abstract class Graphics<T> {
             }
         };
     }
-
-
 
     /**
      * Nastaveni rychlosti animace.

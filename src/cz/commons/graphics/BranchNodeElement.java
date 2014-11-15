@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleDoubleProperty;
  * Zakladni trida pro prvky s vice potomky.
  * @author Martin Šára
  */
-public abstract class BranchNodeElement extends Element implements ConnectibleElement, MultiConnectable {
+public abstract class BranchNodeElement extends Element implements ConnectibleElement, MultiConnectibleElement {
 
     /**
      * Sirka jednoho pole.
@@ -31,8 +31,6 @@ public abstract class BranchNodeElement extends Element implements ConnectibleEl
      */
     private final ConnectibleElement[] childConnector;
 
-    
-    
     public BranchNodeElement(int id, int maxChilds, int keyWidth, int height) {
         this.id = id;
         this.childConnector = new ConnectibleElement[maxChilds];
@@ -41,16 +39,12 @@ public abstract class BranchNodeElement extends Element implements ConnectibleEl
 
         doChildBindings();
     }
-    
-    
-    
+
     /**
      * Inicializace pripojneho bodu pro pripojeni rodice.
      */
     protected abstract void doParentBindings();
-    
-    
-    
+
     /**
      * Inicializace pripojnych bodu potomku.
      */
@@ -90,5 +84,5 @@ public abstract class BranchNodeElement extends Element implements ConnectibleEl
     public DoubleProperty connectYProperty() {
         return centerY;
     }
-    
+
 }
