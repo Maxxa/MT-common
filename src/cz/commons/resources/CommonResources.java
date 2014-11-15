@@ -9,10 +9,12 @@ import java.net.URL;
 public class CommonResources {
 
     /**
-     * Vrati URL objektu dle relativni cesty vztazene k teto tride.
-     * @param relativePath relativni cesta
-     * @return URL
-     */
+	 * Vrati URL objektu dle relativni cesty vztazene k teto tride.
+	 * 
+	 * @param relativePath
+	 *            relative path to resource
+	 * @return URL
+	 */
     public static URL getResource(String relativePath) {
         return CommonResources.class.getResource(relativePath);
     }

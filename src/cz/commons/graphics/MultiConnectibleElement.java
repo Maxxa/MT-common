@@ -1,16 +1,19 @@
 package cz.commons.graphics;
 
 /**
- * Rozhrani pro graficke elementy definujici vice pripojnych bodu pro pomotky.
+ * Interface defining more connection points for children
+ * 
  * @author Martin Šára
  */
 public interface MultiConnectibleElement {
     
     /**
-     * Vrati pripojny bod pro i-teho potomka.
-     * @param i
-     * @return 
-     */
+	 * Gets connector for child on i-position. Sorted from left
+	 * 
+	 * @param i
+	 *            - the position of children
+	 * @return - ConnectibleElement to connect
+	 */
     ConnectibleElement getChildConnector(int i);
     
 }

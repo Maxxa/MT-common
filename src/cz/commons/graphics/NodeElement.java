@@ -41,9 +41,9 @@ public abstract class NodeElement extends Element implements ConnectibleElement 
 	 * 
 	 * @param anchor
 	 *            Anchor element used moved from.
-	 * @param x
+	 * @param dx
 	 *            moved by on x axis.
-	 * @param y
+	 * @param dy
 	 *            moved by on y axis
 	 * @param width
 	 *            of element
@@ -52,11 +52,11 @@ public abstract class NodeElement extends Element implements ConnectibleElement 
 	 * @param id
 	 *            - unique id of element
 	 */
-	protected NodeElement(NodeElement anchor, int x, int y, int width,
+	protected NodeElement(NodeElement anchor, int dx, int dy, int width,
 			int height, int id) {
 		this.id = id;
-		setTranslateX(x + anchor.getTranslateX());
-		setTranslateY(y + anchor.getTranslateY());
+		setTranslateX(dx + anchor.getTranslateX());
+		setTranslateY(dy + anchor.getTranslateY());
 		setAnchorNode(anchor);
 		doBindings(width, height);
 	}
