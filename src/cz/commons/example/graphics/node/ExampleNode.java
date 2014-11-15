@@ -7,14 +7,14 @@ import javafx.scene.shape.Rectangle;
 /**
  * @author Vojtěch Müller
  */
-public class TestNode extends NodeElement {
+public class ExampleNode extends NodeElement {
 
     private static final int width = 20;
     private static final int height = 20;
 
     private Rectangle rectangle = new Rectangle(width,height);
 
-    protected TestNode(int x, int y, int id) {
+    protected ExampleNode(int x, int y, int id) {
         super(x, y, width, height, id);
         initRect();
     }
@@ -24,7 +24,7 @@ public class TestNode extends NodeElement {
         this.getChildren().addAll(rectangle);
     }
 
-    public TestNode(NodeElement anchor, int dx, int dy,int id) {
+    public ExampleNode(NodeElement anchor, int dx, int dy, int id) {
         super(anchor, dx, dy, width, height, id);
         initRect();
     }

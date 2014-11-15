@@ -7,18 +7,18 @@ import javafx.scene.layout.Pane;
 /**
  * @author Vojtěch Müller
  */
-public class DefaultNodeTest extends AbstractExample {
+public class DefaultNodeExample extends AbstractExample {
 
     @Override
     protected void initPane(Pane canvas) {
-        TestNode testNode1 = new TestNode(50,50,1);
-        TestNode testNode2 = new TestNode(100,150,2);
+        ExampleNode testNode1 = new ExampleNode(50,50,1);
+        ExampleNode testNode2 = new ExampleNode(100,150,2);
 
         LineElement line1 = new LineElement(testNode1,testNode2);
         canvas.getChildren().addAll(line1,testNode1,testNode2);
 
-        TestNode testNode3 = new TestNode(200,50,3);
-        TestNode testNode4 = new TestNode(testNode3,0,50,4);
+        ExampleNode testNode3 = new ExampleNode(200,50,3);
+        ExampleNode testNode4 = new ExampleNode(testNode3,0,50,4);
         LineElement line2 = new LineElement(testNode3,testNode4);
         canvas.getChildren().addAll(line2,testNode3,testNode4);
     }
