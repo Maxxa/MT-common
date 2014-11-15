@@ -5,51 +5,36 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 /**
- * Zakladni trida pro spojovaci cary.
+ * Basic class for connectible line.
  * @author Martin Šára
  */
 public class LineElement extends Parent {
     
-    /**
-     * Cara.
-     */
     protected Line line = new Line();
-    
+
     /**
-     * Pocatecni graficky element.
+     * Begin connectible element.
      */
     private ConnectibleElement start;
     /**
-     * Koncovy graficky element.
+     * Ending connectible element.
      */
     private ConnectibleElement end;
 
-    
-    
     /**
-     * Konstrukce spojovaci cary mezi start a end.
+     * Construction connectible line between start and end elements.
      * @param start
      * @param end 
-     * @throws IllegalArgumentException pokud je jeden z elementu null, nebo si jsou rovny
+     * @throws IllegalArgumentException element can not be null
      */
     public LineElement(ConnectibleElement start, ConnectibleElement end) {
-        if (start == null || end == null || start.equals(end)) {
-            throw new IllegalArgumentException("Start or end is null or equals.");
-        }
-
-        this.start = start;
-        this.end = end;
-
-        bindStart(start);
-        bindEnd(end);
-                
+        setStart(start);
+        setEnd(end);
         getChildren().add(line);
     }
     
-
-    
     /**
-     * Nabinduje pocatecni bod cary k danemu pripojnemu bodu.
+     * Binding begin point line to the connection point
      * @param start 
      */
     private void bindStart(ConnectibleElement start) {
@@ -58,7 +43,7 @@ public class LineElement extends Parent {
     }
     
     /**
-     * Nabinduje koncovy bod cary k danemu pripojnemu bodu.
+     * Binding end point line to the connection point
      * @param end 
      */
     private void bindEnd(ConnectibleElement end) {
