@@ -1,0 +1,10 @@
+Ikony dialogu:
+--------------
+https://github.com/marcojakob/javafx-ui-sandbox/blob/master/javafx-dialogs/src/com/sun/javafx/scene/control/skin/resources/confirm48.png
+https://github.com/marcojakob/javafx-ui-sandbox/blob/master/javafx-dialogs/src/com/sun/javafx/scene/control/skin/resources/error48.png
+https://github.com/marcojakob/javafx-ui-sandbox/blob/master/javafx-dialogs/src/com/sun/javafx/scene/control/skin/resources/info48.png
+https://github.com/marcojakob/javafx-ui-sandbox/blob/master/javafx-dialogs/src/com/sun/javafx/scene/control/skin/resources/warning48.png
+
+Zbyle ikony:
+------------
+http://www.famfamfam.com/lab/icons/silk/
