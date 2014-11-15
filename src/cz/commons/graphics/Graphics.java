@@ -12,11 +12,18 @@ import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 /**
+ * This class does not implements backtracking and backward-animations. It's a
+ * mix of color definitions, animation controls and so on. Please use
+ * {@link cz.commons.animation.AnimationControl} instead
+ * <hr>
  * Rodicovska trida pro implentace animaci.
+ * 
  * @author Martin Šára
- * @param <T> typ controlleru
+ * @param <T>
+ *            typ controlleru
  */
-public abstract class Graphics<T> { //TODO
+@Deprecated
+public abstract class Graphics<T> {
     
     /**
      * Vychozi velikost fontu v systemu respektujici aktualni DPI.
@@ -115,9 +122,14 @@ public abstract class Graphics<T> { //TODO
             throw new IllegalArgumentException("rychlost musi byt v rozmezi 0-5");
         }
         this.speed = speed;
-        if (parallelTransition != null) this.parallelTransition.setRate(speed);
-        if (speed == 5) this.duration = MIN_DURATION;
-        else this.duration = NORMAL_DURATION;
+        if (parallelTransition != null) {
+			this.parallelTransition.setRate(speed);
+		}
+        if (speed == 5) {
+			this.duration = MIN_DURATION;
+		} else {
+			this.duration = NORMAL_DURATION;
+		}
     }
 
     /**
@@ -131,8 +143,11 @@ public abstract class Graphics<T> { //TODO
      * Obnovi nastaveni trvani jedne animace podle nastaveni rychlosti.
      */
     public final void resetDuration() {
-        if (this.speed == 5) this.duration = MIN_DURATION;
-        else this.duration = NORMAL_DURATION;
+        if (this.speed == 5) {
+			this.duration = MIN_DURATION;
+		} else {
+			this.duration = NORMAL_DURATION;
+		}
     }
 
     /**
@@ -143,10 +158,11 @@ public abstract class Graphics<T> { //TODO
      * @return
      */
     public final Duration getDuration(int millis) {
-        if (duration == MIN_DURATION)
-            return MIN_DURATION;
-        else
-            return Duration.millis(millis);
+        if (duration == MIN_DURATION) {
+			return MIN_DURATION;
+		} else {
+			return Duration.millis(millis);
+		}
     }
 
     /**
@@ -180,7 +196,9 @@ public abstract class Graphics<T> { //TODO
             throw new IllegalStateException("Another animation is running.");
         }
 //        parallelTransition = RatedParallelTransition.build(speed); TODO
-        if (animations != null) parallelTransition.getChildren().addAll(animations);
+        if (animations != null) {
+			parallelTransition.getChildren().addAll(animations);
+		}
         parallelTransition.setOnFinished(nextStepHandler);
     }
 
