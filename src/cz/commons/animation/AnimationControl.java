@@ -1,13 +1,17 @@
 package cz.commons.animation;
 
-import javafx.animation.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+import javafx.animation.Animation;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.StrokeTransition;
+import javafx.animation.TranslateTransition;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 /**
  * @author Viktor Krejčíř
@@ -28,14 +32,28 @@ public class AnimationControl {
         finishedEvents = new LinkedList<>();
     }
 
+	/***
+	 * Get transition queue collection
+	 * 
+	 * @return list of transitions
+	 */
     public ArrayList<ParallelTransition> getTransitions() {
         return transitions;
     }
 
+	/***
+	 * Add handler that handles state of end of animation in forward direction
+	 * (last animation)
+	 * 
+	 * @param ae
+	 */
     public void addAnimationFinishedListener(AnimationEvent ae) {
         finishedEvents.add(ae);
     }
 
+	/**
+	 * Toggles playing - if running pauses, if paused resumes
+	 */
     public void togglePlaying() {
         if (actualTransition != null) {
             if (actualTransition.getStatus() == Animation.Status.RUNNING) {
@@ -47,6 +65,9 @@ public class AnimationControl {
         }
     }
 
+	/**
+	 * Go step backward
+	 */
     public void goBack() {
         if (actualTransition.getStatus() == Animation.Status.RUNNING) {
             return;
@@ -60,8 +81,8 @@ public class AnimationControl {
     }
 
     /**
-     * Krok vpřed, pokud jsme se vraceli naveme v dopředně animaci tam, kam jsme se vrátili
-     */
+	 * Go step forward
+	 */
     public void goForth() {
         if (actualTransition.getStatus() == Animation.Status.RUNNING) {
             return;
@@ -73,6 +94,11 @@ public class AnimationControl {
         playForward();
     }
 
+	/***
+	 * Sets rate (speed multiplier)
+	 * 
+	 * @param rate
+	 */
     public void setRate(double rate) {
         if (actualTransition != null) {
             actualTransition.setRate(actualTransition.getRate() * rate);
@@ -142,6 +168,12 @@ public class AnimationControl {
         }
     }
 
+	/**
+	 * Mark as step-by step animation
+	 * 
+	 * @param stepping
+	 *            if true animation pauses after each transition
+	 */
     public void markAsStepping(boolean stepping) {
         markedAsStepping = stepping;
     }
@@ -164,6 +196,13 @@ public class AnimationControl {
         actualTransition.play();
     }
 
+	/**
+	 * Sets all children of paralel transition to visible. It can be useful for
+	 * preventing image flickering. (blink effect) It also maintains that all
+	 * nodes will be visible while playing (if they were hidden for some reason)
+	 * 
+	 * @param pt
+	 */
     private void setNodesToVisible(ParallelTransition pt) {
         for (Animation a : pt.getChildren()) {
 
@@ -190,6 +229,10 @@ public class AnimationControl {
         }
     }
 
+	/**
+	 * Clear (flushes) the animation control and transition queue
+	 * 
+	 */
     public void clear() {
         nextTransition.setValue(0);
         transitions.clear();
