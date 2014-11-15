@@ -3,20 +3,23 @@ package cz.commons.graphics;
 import javafx.beans.property.DoubleProperty;
 
 /**
- * Rozhrani pro graficke elementy definujici pripojne body pro cary.
+ * Interface defining connection points for line
+ *
  * @author Martin Šára
  */
 public interface ConnectibleElement {
     
     /**
-     * Pripojna souradnice X.
-     * @return 
+     * Get X coordinate property for connectible element
+     *
+     * @return
      */
     DoubleProperty connectXProperty();
     
     /**
-     * Pripojna souradnice Y.
-     * @return 
+     * Get Y coordinate property for connectible element
+     *
+     * @return
      */
     DoubleProperty connectYProperty();
     

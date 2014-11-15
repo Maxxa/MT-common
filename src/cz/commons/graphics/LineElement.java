@@ -5,8 +5,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 /**
- * Basic class for connectible line.
+ * Basic class for connectible line
+ *
  * @author Martin Šára
+ * @author Vojtěch Müller (refactoring)
  */
 public class LineElement extends Parent {
     

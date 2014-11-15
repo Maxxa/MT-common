@@ -35,7 +35,7 @@ public abstract class BranchNodeElement extends Element implements ConnectibleEl
 
 	/***
 	 * Representing an Element who can be member of branch and can have multiple
-	 * chidlren attached
+	 * children attached
 	 * 
 	 * 
 	 * @param id
