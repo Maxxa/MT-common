@@ -5,14 +5,16 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
 /**
- * Zakladni trida pro prvky s vice potomky.
+ * Basic class for elements with <b>multiple</b> children.
+ * 
  * @author Martin Šára
  */
 public abstract class BranchNodeElement extends Element implements ConnectibleElement, MultiConnectibleElement {
 
     /**
-     * Sirka jednoho pole.
-     */
+	 * Width of single field. The node can consist multiple fields (depending on
+	 * how many keys/maxChildren are present)
+	 */
     private final int fieldWidth;
     /**
      * Vyska.
@@ -31,9 +33,23 @@ public abstract class BranchNodeElement extends Element implements ConnectibleEl
      */
     private final ConnectibleElement[] childConnector;
 
-    public BranchNodeElement(int id, int maxChilds, int keyWidth, int height) {
+	/***
+	 * Representing an Element who can be member of branch and can have multiple
+	 * chidlren attached
+	 * 
+	 * 
+	 * @param id
+	 *            - unique id of node
+	 * @param maxChildren
+	 *            - maximum children <i> (number of keys + 1) </i>
+	 * @param keyWidth
+	 *            - width of single key field
+	 * @param height
+	 *            - height of element
+	 */
+	public BranchNodeElement(int id, int maxChildren, int keyWidth, int height) {
         this.id = id;
-        this.childConnector = new ConnectibleElement[maxChilds];
+		this.childConnector = new ConnectibleElement[maxChildren];
         this.fieldWidth = keyWidth;
         this.height = height;
 
