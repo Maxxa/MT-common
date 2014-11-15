@@ -27,7 +27,6 @@ public class AnimationControl {
         markedAsStepping = false;
         finishedEvents = new LinkedList<>();
         //      ad = AnimationDescription.getAnimationDescription();
-
     }
 
     public ArrayList<ParallelTransition> getTransitions() {
