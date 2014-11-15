@@ -16,6 +16,7 @@ public class LineElement extends Parent {
      * Begin connectible element.
      */
     private ConnectibleElement start;
+
     /**
      * Ending connectible element.
      */
