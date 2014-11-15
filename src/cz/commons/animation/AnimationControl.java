@@ -1,17 +1,13 @@
 package cz.commons.animation;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-
-import javafx.animation.Animation;
-import javafx.animation.ParallelTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.StrokeTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * @author Viktor
@@ -31,6 +27,7 @@ public class AnimationControl {
         markedAsStepping = false;
         finishedEvents = new LinkedList<>();
         //      ad = AnimationDescription.getAnimationDescription();
+
     }
 
     public ArrayList<ParallelTransition> getTransitions() {
