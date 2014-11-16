@@ -5,7 +5,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
 /**
- * Basic class for elements with <b>single</b> connection point
+ * Basic class for elements width <b>single</b> connection point
  * 
  * @author Martin Šára
  * @author Viktor Krejčíř (refactoring)

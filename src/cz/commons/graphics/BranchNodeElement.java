@@ -5,7 +5,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
 /**
- * Basic class for elements with <b>multiple</b> children.
+ * Basic class for elements width <b>multiple</b> children.
  * 
  * @author Martin Šára
  */

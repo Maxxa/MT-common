@@ -1,7 +1,7 @@
 package cz.commons.graphics;
 
 /**
- * Node element with only <b> two children </b>.
+ * Node element width only <b> two children </b>.
  *
  * @author Vojtěch Müller
  */

@@ -200,7 +200,7 @@ public class Dialog<T> {
         protected final VBox centerVBox = new VBox(5);
         protected DialogValidator validator;
         
-        // dialog with standard buttons
+        // dialog width standard buttons
         protected BaseDialogImpl(String title, String message, Icon icon, Buttons buttons) {
             super(StageStyle.UTILITY);
             init(title);
