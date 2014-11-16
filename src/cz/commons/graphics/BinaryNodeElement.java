@@ -1,7 +1,5 @@
 package cz.commons.graphics;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 /**
  * Node element with only <b> two children </b>.
  *
