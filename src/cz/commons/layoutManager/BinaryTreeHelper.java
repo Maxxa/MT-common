@@ -3,7 +3,7 @@ package cz.commons.layoutManager;
 /**
  * @author Vojtěch Müller
  */
-final class BinaryTreeHelper {
+public final class BinaryTreeHelper {
 
     public static Integer getMaxElements(Integer depth){
         if(depth ==0) return 0;

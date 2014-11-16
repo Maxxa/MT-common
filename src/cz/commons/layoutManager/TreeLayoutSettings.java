@@ -1,5 +1,7 @@
 package cz.commons.layoutManager;
 
+import javafx.scene.layout.Pane;
+
 /**
  * @author Vojtěch Müller
  */
@@ -32,4 +34,5 @@ public class TreeLayoutSettings {
     public Integer getHeight() {
         return height;
     }
+
 }
