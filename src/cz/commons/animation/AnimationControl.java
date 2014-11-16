@@ -30,6 +30,7 @@ public class AnimationControl {
         transitions = new ArrayList<>();
         markedAsStepping = false;
         finishedEvents = new LinkedList<>();
+		rate = 1;
     }
 
 	/***
