@@ -1,7 +1,7 @@
 package cz.commons.example.graphics.layoutManager;
 
-import cz.commons.graphics.Element;
 import cz.commons.layoutManager.IFactoryElement;
+import cz.commons.utils.GeneratorElementsNumbers;
 
 /**
  * @author Vojtěch Müller

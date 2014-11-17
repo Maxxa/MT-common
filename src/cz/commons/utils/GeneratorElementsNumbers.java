@@ -1,4 +1,4 @@
-package cz.commons.example.graphics.layoutManager;
+package cz.commons.utils;
 
 /**
  * @author Vojtěch Müller
