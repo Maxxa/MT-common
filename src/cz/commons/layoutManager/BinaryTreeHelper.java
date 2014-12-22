@@ -30,4 +30,12 @@ public final class BinaryTreeHelper {
         return settings.getPaddingTop()+(depth-1)*settings.getHeightNode()+(depth-1)*settings.getHorizontalSpace();
     }
 
+    public static Integer getLeftChildrenIndex(Integer parentIndexAtRow){
+        return parentIndexAtRow*2;
+    }
+
+    public static Integer getRightChildrenIndex(Integer parentIndexAtRow){
+        return getLeftChildrenIndex(parentIndexAtRow)+1;
+    }
+
 }

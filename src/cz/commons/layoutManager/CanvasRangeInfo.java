@@ -1,7 +1,7 @@
 package cz.commons.layoutManager;
 
 /**
- * @author Vojtěch Müller //TODO
+ * @author Vojtěch Müller
  */
 public class CanvasRangeInfo {
 

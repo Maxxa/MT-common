@@ -29,4 +29,5 @@ public class DepthRowNode {
     public void setPoint(Point2D point) {
         this.point = point;
     }
+
 }

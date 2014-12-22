@@ -5,6 +5,7 @@ import cz.commons.graphics.Element;
 
 /**
  * @author Vojtěch Müller
+ * @deprecated
  */
 public interface IFactoryElement<T extends Element> {
 

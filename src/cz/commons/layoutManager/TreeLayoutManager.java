@@ -28,6 +28,8 @@ public class TreeLayoutManager {
     }
 
     public ElementInfo addElement(IFactoryElement factory, Integer depth,Integer idParent){
+           //TODO
+
 //        if(depth> currentMaxDepth){
 ////            recalculateRange(depth);
 //        }
