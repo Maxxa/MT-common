@@ -14,12 +14,12 @@ public final class BinaryTreeHelper {
     }
 
     /**
-     * Method return maximal <b>width</b> for depth, with all elements.
+     * Method return maximal <b>widthNode</b> for depth, with all elements.
      * */
     public static Integer getDepthWidth(Integer maxDepth, TreeLayoutSettings settings){
         if(maxDepth==0)return 0;
         Integer maxElements = getCountElements(maxDepth);
-        return  maxElements*settings.getWidth()+(maxElements-1)*settings.getVerticalSpace();
+        return  maxElements*settings.getWidthNode()+(maxElements-1)*settings.getVerticalSpace();
     }
 
 }

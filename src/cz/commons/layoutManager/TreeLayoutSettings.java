@@ -1,7 +1,5 @@
 package cz.commons.layoutManager;
 
-import javafx.scene.layout.Pane;
-
 /**
  * @author Vojtěch Müller
  */
@@ -9,14 +7,14 @@ public class TreeLayoutSettings {
 
     protected final Integer horizontalSpace;
     protected final Integer verticalSpace;
-    protected final Integer width;
-    protected final Integer height;
+    protected final Integer widthNode;
+    protected final Integer heightNode;
 
-    public TreeLayoutSettings(Integer horizontalSpace, Integer verticalSpace, Integer width, Integer height) {
+    public TreeLayoutSettings(Integer horizontalSpace, Integer verticalSpace, Integer widthNode, Integer heightNode) {
         this.horizontalSpace = horizontalSpace;
         this.verticalSpace = verticalSpace;
-        this.width = width;
-        this.height = height;
+        this.widthNode = widthNode;
+        this.heightNode = heightNode;
     }
 
     public Integer getHorizontalSpace() {
@@ -27,12 +25,12 @@ public class TreeLayoutSettings {
         return verticalSpace;
     }
 
-    public Integer getWidth() {
-        return width;
+    public Integer getWidthNode() {
+        return widthNode;
     }
 
-    public Integer getHeight() {
-        return height;
+    public Integer getHeightNode() {
+        return heightNode;
     }
 
 }
