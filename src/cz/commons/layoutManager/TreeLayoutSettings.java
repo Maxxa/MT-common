@@ -5,12 +5,18 @@ package cz.commons.layoutManager;
  */
 public class TreeLayoutSettings {
 
+    protected final Integer paddingTop;
     protected final Integer horizontalSpace;
     protected final Integer verticalSpace;
     protected final Integer widthNode;
     protected final Integer heightNode;
 
     public TreeLayoutSettings(Integer horizontalSpace, Integer verticalSpace, Integer widthNode, Integer heightNode) {
+        this(15,horizontalSpace,verticalSpace, widthNode,heightNode);
+    }
+
+    public TreeLayoutSettings(Integer paddingTop, Integer horizontalSpace, Integer verticalSpace, Integer widthNode, Integer heightNode) {
+        this.paddingTop = paddingTop;
         this.horizontalSpace = horizontalSpace;
         this.verticalSpace = verticalSpace;
         this.widthNode = widthNode;
@@ -33,4 +39,7 @@ public class TreeLayoutSettings {
         return heightNode;
     }
 
+    public Integer getPaddingTop() {
+        return paddingTop;
+    }
 }

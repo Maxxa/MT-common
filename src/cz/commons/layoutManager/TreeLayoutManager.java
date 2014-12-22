@@ -16,12 +16,11 @@ public class TreeLayoutManager {
 
     protected final TreeLayoutSettings settings;
 
-    protected final RangeInfo rangeInfo;
+    protected final CanvasRangeInfo rangeInfo;
 
     public TreeLayoutManager(TreeLayoutSettings settings,Pane canvas) {
         this.settings = settings;
-        rangeInfo = new RangeInfo();
-        rangeInfo.centerX = (int) canvas.getWidth()/2;
+        rangeInfo = new CanvasRangeInfo((int) canvas.getWidth()/2);
     }
 
     public ElementInfo getElementInfo(Integer elementId){
@@ -29,28 +28,23 @@ public class TreeLayoutManager {
     }
 
     public ElementInfo addElement(IFactoryElement factory, Integer depth,Integer idParent){
-        if(depth> currentMaxDepth){
-            recalculateRange(depth);
-        }
+//        if(depth> currentMaxDepth){
+////            recalculateRange(depth);
+//        }
         ElementInfo info = new ElementInfo();
-        if(idParent==null){ //center position
-            info.element= factory.getElementOnPosition(rangeInfo.centerX-settings.getWidth()/2,15);
-        }else{
-            //find and calculate to next depth positions...
-        }
-
-        info.depth = depth;
-        info.idParent = idParent;
-        elementMap.put(info.element.getElementId(),info);
+//        if(idParent==null){ //center position
+//            info.element= factory.getElementOnPosition(rangeInfo.centerX-settings.getWidthNode()/2,15);
+//        }else{
+//            //find and calculate to next depth positions...
+//        }
+//
+//        info.depth = depth;
+//        info.idParent = idParent;
+//        elementMap.put(info.element.getElementId(),info);
         return info;
     }
 
-    protected void recalculateRange(Integer depth) {
-        currentMaxDepth = depth;
-        Integer half = BinaryTreeHelper.getMaxDepthWidth(depth,settings)/2;
-        rangeInfo.minX = rangeInfo.centerX - half;
-        rangeInfo.minX = rangeInfo.centerX+half;
-    }
+
 
 
 }
