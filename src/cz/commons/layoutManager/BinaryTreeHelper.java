@@ -5,17 +5,21 @@ package cz.commons.layoutManager;
  */
 public final class BinaryTreeHelper {
 
-    public static Integer getMaxElements(Integer depth){
-        if(depth ==0) return 0;
-        return new Double(Math.pow(2,depth)).intValue();
+    /**
+     *  Method return count elements for depth. Root element is in 1 depth.
+     * */
+    public static Integer getCountElements(Integer depth){
+        if(depth == 0) return 0;
+        return new Double(Math.pow(2,depth-1)).intValue();
     }
 
-
-    public static Integer getMaxDepthWidth(Integer maxDepth,TreeLayoutSettings settings){
+    /**
+     * Method return maximal <b>width</b> for depth, with all elements.
+     * */
+    public static Integer getDepthWidth(Integer maxDepth, TreeLayoutSettings settings){
         if(maxDepth==0)return 0;
-        Integer maxElements = getMaxElements(maxDepth);
+        Integer maxElements = getCountElements(maxDepth);
         return  maxElements*settings.getWidth()+(maxElements-1)*settings.getVerticalSpace();
-    };
-
+    }
 
 }
