@@ -23,9 +23,9 @@ public class DepthManager {
 
     public void addDepth() {
         DepthRow row = new DepthRow(eventBus,info, depthRows.size()+1);
-        double width= info.getCanvasInfo().getMaxX()-info.getCanvasInfo().getMinX();
-        Integer size =BinaryTreeHelper.getCountElements(depthRows.size()+1);
-        double d =width/size;
+//        double width= info.getCanvasInfo().getMaxX()-info.getCanvasInfo().getMinX();
+//        Integer size =BinaryTreeHelper.getCountElements(depthRows.size()+1);
+//        double d =width/size;
 //        System.out.println(String.format("%d -- width: %d -- max depth: %d -- offsetX size: %.3f",
 //                                    depthRows.size()+1,
 //                                    info.getCanvasInfo().getMaxX()-info.getCanvasInfo().getMinX(),
@@ -59,7 +59,7 @@ public class DepthManager {
         return depthRows.size();
     }
 
-    public void setEventConsumer(Object consumer){
+    public void addEventConsumer(Object consumer){
         eventBus.register(consumer);
     }
 

@@ -89,7 +89,7 @@ public class DepthRow {
 
     private void movePoint(DepthRowNode node, Point2D newPoint){
         if(node.getElementId()!=null) {
-            eventBus.post(new MoveTreeElement(node.getElementId(), node.getPoint(), newPoint));
+            eventBus.post(new MoveElementEvent(node.getElementId(), node.getPoint(), newPoint));
         }
         node.setPoint(newPoint);
     }
