@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * @author Vojtěch Müller
  */
-public class TreeLayoutManager {
+public class TreeLayoutManager implements ITreeLayoutManager {
 
     protected Map<Integer,ElementInfo> elementMap = new HashMap<>();
 
@@ -18,9 +18,22 @@ public class TreeLayoutManager {
 
     protected final CanvasRangeInfo rangeInfo;
 
-    public TreeLayoutManager(TreeLayoutSettings settings,Pane canvas) {
+    protected final DepthManager depthManager;
+
+    public TreeLayoutManager(final TreeLayoutSettings settings,Pane canvas) {
         this.settings = settings;
         rangeInfo = new CanvasRangeInfo((int) canvas.getWidth()/2);
+        depthManager = new DepthManager(new IDefaultTreeInfo() {
+            @Override
+            public TreeLayoutSettings getLayoutSetting() {
+                return settings;
+            }
+
+            @Override
+            public CanvasRangeInfo getCanvasInfo() {
+                return rangeInfo;
+            }
+        });
     }
 
     public ElementInfo getElementInfo(Integer elementId){
@@ -29,24 +42,15 @@ public class TreeLayoutManager {
 
     public ElementInfo addElement(IFactoryElement factory, Integer depth,Integer idParent){
            //TODO
-
-//        if(depth> currentMaxDepth){
-////            recalculateRange(depth);
-//        }
-        ElementInfo info = new ElementInfo();
-//        if(idParent==null){ //center position
-//            info.element= factory.getElementOnPosition(rangeInfo.centerX-settings.getWidthNode()/2,15);
-//        }else{
-//            //find and calculate to next depth positions...
-//        }
-//
-//        info.depth = depth;
-//        info.idParent = idParent;
-//        elementMap.put(info.element.getElementId(),info);
-        return info;
+        return null;
     }
 
 
+    @Override
+    public void clear() {
+        currentMaxDepth=0;
+        elementMap.clear();
+        depthManager.clear();
 
-
+    }
 }

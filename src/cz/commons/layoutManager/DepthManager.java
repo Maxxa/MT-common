@@ -53,4 +53,7 @@ public class DepthManager {
         eventBus.register(consumer);
     }
 
+    public void clear() {
+        this.depthRows.clear();
+    }
 }
