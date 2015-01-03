@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO remove debug prints...
  * @author Vojtěch Müller
  */
 public class DepthRow {
@@ -30,28 +29,19 @@ public class DepthRow {
         final Integer maxDepthSize = BinaryTreeHelper.getCountElements(maxDepth);
         final double minimalOffset= ((double)(info.getCanvasInfo().getMaxX()-info.getCanvasInfo().getMinX())/maxDepthSize);
         final Integer offsetMultiple = maxDepthSize/listNodes.size();
-//        System.out.println(String.format(
-//                    "| Depth: %d | Size: %s | Offset: %d | First offest: %d |",
-//                    depth,
-//                    listNodes.size(),
-//                    offsetMultiple,
-//                    offsetMultiple/2));
 
         Double lastOffset = Double.valueOf(info.getCanvasInfo().getMinX())
                                 - info.getLayoutSetting().getWidthNode()/2;
-//        System.out.print("\t");
         for (int i = 0; i < listNodes.size(); i++) {
             if(i==0){
                 lastOffset += ((double)(offsetMultiple/2))*minimalOffset;
             }else{
                 lastOffset += offsetMultiple*minimalOffset;
             }
-//            System.out.print(String.format(" [ %.3f ] ", lastOffset));
             DepthRowNode node = listNodes.get(i);
             Point2D point = new Point2D(lastOffset,node.getPoint().getY());
             movePoint(node, point);
         }
-//        System.out.println("");
     }
 
     public void recalculateLastDepth() {
