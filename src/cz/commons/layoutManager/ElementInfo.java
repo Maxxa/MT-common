@@ -4,7 +4,7 @@ import cz.commons.graphics.Element;
 
 public class ElementInfo{
 
-    private Element element;
+    protected Element element;
 
     Integer depth;
     Integer indexAtRow;

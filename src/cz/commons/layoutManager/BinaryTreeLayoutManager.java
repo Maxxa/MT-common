@@ -67,17 +67,40 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
         ElementInfo info = new ElementInfo(element,depth,indexAtRow,idParent);
         depthManager.getDepth(depth).getNodeElement(indexAtRow).setElementId(element.getElementId());
         elementMap.put(element.getElementId(),info);
+        canvas.getChildren().addAll(element);
         return info;
     }
 
-    public void removeElement(Integer elementId){
-        //Odstranit pouze jen listy
+    public boolean removeElement(Integer elementId){
+        ElementInfo elementInfo = elementMap.get(elementId);
+        if(elementInfo!=null){
+            if((elementInfo.depth+1)<=depthManager.getMaxDepth()){
+                // My be exist child i must control.
+                Integer leftChild = BinaryTreeHelper.getLeftChildrenIndex(elementInfo.indexAtRow);
+                DepthRow depthRow = depthManager.getDepth(elementInfo.depth);
+                DepthRowNode left = depthRow.getNodeElement(leftChild);
+                DepthRowNode right = depthRow.getNodeElement(leftChild+1);
+                if(left.getElementId()!=null || right.getElementId()!=null){
+                    return false;
+                }
+            }
+            elementMap.remove(elementId);
+            depthManager.getDepth(elementInfo.depth).getNodeElement(elementInfo.indexAtRow).setElementId(null);
+            canvas.getChildren().remove(elementInfo.element);
+            return true;
+        }
+        return false;
     }
 
-    public void swapElement(Integer first,Integer second){
-
+    public void swapElement(Integer firstId,Integer secondId){
+        ElementInfo firstInfo = elementMap.get(firstId);
+        ElementInfo secondInfo = elementMap.get(secondId);
+        if(firstInfo!=null && secondInfo!= null){
+            Element temp = firstInfo.getElement();
+            firstInfo.element = secondInfo.getElement();
+            secondInfo.element=temp;
+        }
     }
-
 
     @Override
     public Pane getCanvas() {
