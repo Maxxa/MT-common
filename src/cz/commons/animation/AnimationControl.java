@@ -70,7 +70,7 @@ public class AnimationControl {
 	 * Go step backward
 	 */
     public void goBack() {
-        if(actualTransition==null)return;
+        if(actualTransition==null) return;
         if (actualTransition.getStatus() == Animation.Status.RUNNING) {
             return;
         }
@@ -90,7 +90,9 @@ public class AnimationControl {
         if (actualTransition.getStatus() == Animation.Status.RUNNING) {
             return;
         }
-
+        System.out.println("pis.....");
+        System.out.println(nextTransition.get());
+        System.out.println(transitions.size());
         if (nextTransition.get() == transitions.size()) {
             return;
         }
@@ -242,4 +244,7 @@ public class AnimationControl {
         finishedEvents.clear();
     }
 
+    public boolean isMarkedAsStepping() {
+        return markedAsStepping;
+    }
 }

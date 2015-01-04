@@ -1,10 +1,7 @@
 package cz.commons.example.graphics.layoutManager;
 
 import cz.commons.example.AbstractExample;
-import cz.commons.layoutManager.BinaryTreeHelper;
-import cz.commons.layoutManager.ElementInfo;
-import cz.commons.layoutManager.TreeLayoutManager;
-import cz.commons.layoutManager.TreeLayoutSettings;
+import cz.commons.layoutManager.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -17,19 +14,18 @@ public class Example extends AbstractExample {
     protected Integer width = 1000;
     protected Integer height = 600;
     TreeLayoutSettings settings;
-    TreeLayoutManager manager;
+    BinaryTreeLayoutManager manager;
 
     @Override
     protected void initPane(Pane canvas) {
-        settings=  new TreeLayoutSettings(20,20,25,20);
-        manager= new TreeLayoutManager(settings,canvas);
+        settings=  new TreeLayoutSettings(10,10,25,20);
+        manager= new BinaryTreeLayoutManager(settings,canvas);
 
-        ElementFactory factory = new ElementFactory();
 
         initCenterLine(canvas);
         Integer depth = 1;
-        ElementInfo info  = manager.addElement(factory,depth,null);
-        canvas.getChildren().addAll(info.element);
+//        ElementInfo info  = manager.addElement(factory,depth,null);
+//        canvas.getChildren().addAll(info.element);
 
 //        positionY += heightStep;
 //        depth++;

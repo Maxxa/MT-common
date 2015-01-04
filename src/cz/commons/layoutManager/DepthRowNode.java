@@ -26,7 +26,7 @@ public class DepthRowNode {
         return point;
     }
 
-    public void setPoint(Point2D point) {
+    protected void setPoint(Point2D point) {
         this.point = point;
     }
 
