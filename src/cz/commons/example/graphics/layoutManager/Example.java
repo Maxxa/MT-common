@@ -2,9 +2,12 @@ package cz.commons.example.graphics.layoutManager;
 
 import cz.commons.example.AbstractExample;
 import cz.commons.layoutManager.*;
+import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+
+import java.awt.*;
 
 /**
  * @author Vojtěch Müller
@@ -20,29 +23,92 @@ public class Example extends AbstractExample {
     protected void initPane(Pane canvas) {
         settings=  new TreeLayoutSettings(10,10,25,20);
         manager= new BinaryTreeLayoutManager(settings,canvas);
-
-
         initCenterLine(canvas);
+        BinaryElement[] elements = new BinaryElement[]{
+                new BinaryElement(1,1,1,"s"),
+
+                new BinaryElement(2,1,1,"s"),
+                new BinaryElement(3,1,1,"s"),
+
+                new BinaryElement(4,1,1,"s"),
+                new BinaryElement(5,1,1,"s"),
+                new BinaryElement(6,1,1,"s"),
+                new BinaryElement(7,1,1,"s"),
+
+                new BinaryElement(8,1,1,"s"),
+                new BinaryElement(9,1,1,"s"),
+                new BinaryElement(10,1,1,"s"),
+                new BinaryElement(11,1,1,"s"),
+                new BinaryElement(12,1,1,"s"),
+                new BinaryElement(13,1,1,"s"),
+                new BinaryElement(14,1,1,"s"),
+                new BinaryElement(15,1,1,"s"),
+
+                new BinaryElement(16,1,1,"s"),
+                new BinaryElement(17,1,1,"s"),
+                new BinaryElement(18,1,1,"s"),
+                new BinaryElement(19,1,1,"s"),
+                new BinaryElement(20,1,1,"s"),
+                new BinaryElement(21,1,1,"s"),
+                new BinaryElement(22,1,1,"s"),
+                new BinaryElement(23,1,1,"s"),
+                new BinaryElement(24,1,1,"s"),
+                new BinaryElement(25,1,1,"s"),
+                new BinaryElement(26,1,1,"s"),
+                new BinaryElement(27,1,1,"s"),
+                new BinaryElement(28,1,1,"s"),
+                new BinaryElement(29,1,1,"s"),
+                new BinaryElement(30,1,1,"s"),
+                new BinaryElement(31,1,1,"s"),
+        };
         Integer depth = 1;
-//        ElementInfo info  = manager.addElement(factory,depth,null);
-//        canvas.getChildren().addAll(info.element);
 
-//        positionY += heightStep;
-//        depth++;
-//        positionX = (int)(positionX/2*depth);
-//        BinaryElement element1 = new BinaryElement(2, (int) (positionX-halfElementWidth),positionY,"test");
-//        BinaryElement element2 = new BinaryElement(3, (int) (positionX*depth-halfElementWidth),positionY,"test");
-//
-//        canvas.getChildren().addAll(element1,element2);
-//        positionY += heightStep;
-//
-//        Integer temp = (int)(positionX/2-halfElementWidth);
-//        BinaryElement element3 = new BinaryElement(4,temp,positionY,"test");
-//        BinaryElement element4 = new BinaryElement(5,temp*2 ,positionY,"test");
-//        BinaryElement element5 = new BinaryElement(6,temp*3,positionY,"test");
-//        BinaryElement element6 = new BinaryElement(7,temp*4,positionY,"test");
+        manager.addElement(elements[0],null,false);
 
-      //  canvas.getChildren().addAll(element3,element4,element5,element6);
+        manager.addElement(elements[1],1,true);
+        manager.addElement(elements[2],1,false);
+
+        manager.addElement(elements[3],2,true);
+        manager.addElement(elements[4],2,false);
+        manager.addElement(elements[5],3,true);
+        manager.addElement(elements[6],3,false);
+
+        manager.addElement(elements[7],4,true);
+        manager.addElement(elements[8],4,false);
+        manager.addElement(elements[9],5,true);
+        manager.addElement(elements[10],5,false);
+        manager.addElement(elements[11],6,true);
+        manager.addElement(elements[12],6,false);
+        manager.addElement(elements[13],7,true);
+        manager.addElement(elements[14],7,false);
+
+        manager.addElement(elements[15],8,true);
+        manager.addElement(elements[16],8,false);
+        manager.addElement(elements[17],9,true);
+        manager.addElement(elements[18],9,false);
+        manager.addElement(elements[19],10,true);
+        manager.addElement(elements[20],10,false);
+        manager.addElement(elements[21],11,true);
+        manager.addElement(elements[22],11,false);
+        manager.addElement(elements[23],12,true);
+        manager.addElement(elements[24],12,false);
+        manager.addElement(elements[25],13,true);
+        manager.addElement(elements[26],13,false);
+        manager.addElement(elements[27],14,true);
+        manager.addElement(elements[28],14,false);
+        manager.addElement(elements[29],15,true);
+        manager.addElement(elements[30],15,false);
+
+
+        for (int i = 0; i <elements.length ; i++) {
+            Point2D point = manager.getNodePosition(elements[i].getElementId());
+            System.out.println(point);
+            if(point!=null){
+                elements[i].setTranslateX(point.getX());
+                elements[i].setTranslateY(point.getY());
+                elements[i].setTranslateY(point.getY());
+            }
+        }
     }
 
     private void initCenterLine(Pane canvas) {

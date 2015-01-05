@@ -9,6 +9,8 @@ import javafx.scene.layout.Pane;
 public interface ITreeLayoutManager {
 
 
+    ElementInfo getElementInfo(Integer elementId);
+
     Point2D getNodePosition(Integer elementId);
 
     Pane getCanvas();

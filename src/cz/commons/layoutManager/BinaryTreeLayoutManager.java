@@ -39,6 +39,8 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
         });
     }
 
+
+    @Override
     public ElementInfo getElementInfo(Integer elementId){
         return elementMap.get(elementId);
     }
@@ -57,11 +59,11 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
                 indexAtRow = BinaryTreeHelper.getRightChildIndex(parentInfo.indexAtRow);
             }
         }else{
-            depth = 1;
+            depth = 0;
             indexAtRow = 0;
         }
 
-        if(depth>depthManager.getMaxDepth()){
+        if(depth>(depthManager.getMaxDepth()-1) || depth==0){
             depthManager.addDepth();
         }
 
