@@ -1,6 +1,7 @@
 package cz.commons.layoutManager;
 
 import cz.commons.graphics.Element;
+import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 
 import java.util.HashMap;
@@ -96,10 +97,30 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
         ElementInfo firstInfo = elementMap.get(firstId);
         ElementInfo secondInfo = elementMap.get(secondId);
         if(firstInfo!=null && secondInfo!= null){
-            Element temp = firstInfo.getElement();
-            firstInfo.element = secondInfo.getElement();
-            secondInfo.element=temp;
+            //swap ids at Depth Manager.
+            depthManager.getDepth(firstInfo.depth).getNodeElement(firstInfo.indexAtRow).setElementId(secondId);
+            depthManager.getDepth(secondInfo.depth).getNodeElement(secondInfo.indexAtRow).setElementId(firstId);
+
+            //swap elements info
+            ElementInfo temp = new ElementInfo(null, firstInfo.getDepth(),firstInfo.getIndexAtRow(),firstInfo.getIdParent());
+            firstInfo.depth = secondInfo.getDepth();
+            firstInfo.indexAtRow = secondInfo.getIndexAtRow();
+            firstInfo.idParent = secondInfo.getIdParent();
+
+            secondInfo.depth = temp.getDepth();
+            secondInfo.indexAtRow = temp.getIndexAtRow();
+            secondInfo.idParent = temp.getIdParent();
         }
+    }
+
+    @Override
+    public Point2D getNodePosition(Integer elementId) {
+        ElementInfo elementInfo = elementMap.get(elementId);
+        Point2D result = null;
+        if(elementInfo!=null){
+            result = depthManager.getDepth(elementInfo.getDepth()).getNodeElement(elementInfo.indexAtRow).getPoint();
+        }
+        return result;
     }
 
     @Override
