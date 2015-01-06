@@ -106,7 +106,6 @@ public class Example extends AbstractExample {
             if(point!=null){
                 elements[i].setTranslateX(point.getX());
                 elements[i].setTranslateY(point.getY());
-                elements[i].setTranslateY(point.getY());
             }
         }
     }
