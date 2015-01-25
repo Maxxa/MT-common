@@ -25,5 +25,11 @@ public interface IAnimationControl {
 
     void clear();
 
-    void clearFinishedEvents();
+    void removeFinishedHandlers();
+
+    boolean isMarkedAsStepping();
+
+    boolean isNextTransition();
+
+    boolean isForwardTransition();
 }

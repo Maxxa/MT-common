@@ -10,6 +10,8 @@ import javafx.animation.StrokeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
@@ -31,6 +33,12 @@ public class AnimationControl implements IAnimationControl{
         markedAsStepping = false;
         finishedEvents = new LinkedList<>();
 		rate = 1;
+        nextTransition.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldaVal, Number newVal) {
+                System.out.println(oldaVal+"  "+newVal);
+            }
+        });
     }
 
     /***
@@ -47,7 +55,7 @@ public class AnimationControl implements IAnimationControl{
 	 * Add handler that handles state of end of animation in forward direction
 	 * (last animation)
 	 *
-	 * @param ae
+	 * @param ae animation event
 	 */
     @Override
     public void addAnimationFinishedListener(AnimationEvent ae) {
@@ -106,17 +114,19 @@ public class AnimationControl implements IAnimationControl{
     @Override
     public void playForward() {
         int index = nextTransition.get();
-        actualTransition = transitions.get(index);
-        setNodesToVisible(actualTransition);
-        actualTransition.setOnFinished(createForwardTransitionHandler());
-        actualTransition.setRate(1 * rate);
-        actualTransition.play();
+        if(index < transitions.size()){
+            actualTransition = transitions.get(index);
+            setNodesToVisible(actualTransition);
+            actualTransition.setOnFinished(createForwardTransitionHandler());
+            actualTransition.setRate(1 * rate);
+            actualTransition.play();
+        }
     }
 
 	/***
 	 * Sets rate (speed multiplier)
 	 *
-	 * @param rate
+	 * @param rate animation speed rate
 	 */
     @Override
     public void setRate(double rate) {
@@ -131,6 +141,7 @@ public class AnimationControl implements IAnimationControl{
 
             @Override
             public void handle(ActionEvent t) {
+                System.out.println("next transtiion +1");
                 nextTransition.set(nextTransition.get() + 1);
 
                 if (!markedAsStepping) {
@@ -156,8 +167,8 @@ public class AnimationControl implements IAnimationControl{
                         animationFinished(false);
                     }
                 }
+                System.out.println("next transition - 1");
                 nextTransition.set(nextTransition.get() - 1);
-
             }
         };
     }
@@ -208,11 +219,11 @@ public class AnimationControl implements IAnimationControl{
     }
 
 	/**
-	 * Sets all children of paralel transition to visible. It can be useful for
+	 * Sets all children of parallel transition to visible. It can be useful for
 	 * preventing image flickering. (blink effect) It also maintains that all
 	 * nodes will be visible while playing (if they were hidden for some reason)
 	 * 
-	 * @param pt
+	 * @param pt parallel transition
 	 */
     private void setNodesToVisible(ParallelTransition pt) {
         for (Animation a : pt.getChildren()) {
@@ -251,11 +262,37 @@ public class AnimationControl implements IAnimationControl{
     }
 
     @Override
-    public void clearFinishedEvents(){
+    public void removeFinishedHandlers(){
         finishedEvents.clear();
     }
 
+    @Override
     public boolean isMarkedAsStepping() {
         return markedAsStepping;
     }
+
+    @Override
+    public boolean isNextTransition(){
+        if(actualTransition==null)return false;
+//        int idx = getNextTransitionId(true);
+//        System.out.print(idx + "  ");
+        return true;
+    }
+
+    @Override
+    public boolean isForwardTransition(){
+        if(actualTransition==null)return false;
+//        int idx = getNextTransitionId(false);
+//        System.out.print(idx + "  ");
+        return true;
+    }
+//
+//    private int getNextTransitionId(boolean isForward){
+//        if (actualTransition.getStatus() == Animation.Status.RUNNING) {
+//            return nextTransition.get() + (isForward?-1:1);
+//        }
+//
+//        return nextTransition.get();
+//    }
+
 }
