@@ -244,9 +244,14 @@ public class AnimationControl implements IAnimationControl{
 	 * Clear (flushes) the animation control and transition queue
 	 * 
 	 */
+    @Override
     public void clear() {
         nextTransition.setValue(0);
         transitions.clear();
+    }
+
+    @Override
+    public void clearFinishedEvents(){
         finishedEvents.clear();
     }
 

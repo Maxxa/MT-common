@@ -22,4 +22,8 @@ public interface IAnimationControl {
     void addAnimationFinishedListener(AnimationEvent ae);
 
     void playForward();
+
+    void clear();
+
+    void clearFinishedEvents();
 }
