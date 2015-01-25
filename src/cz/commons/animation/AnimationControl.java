@@ -10,8 +10,6 @@ import javafx.animation.StrokeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
@@ -76,7 +74,9 @@ public class AnimationControl implements IAnimationControl{
 	 */
     @Override
     public void goBack() {
-        if(actualTransition==null) return;
+        if(actualTransition==null) {
+			return;
+		}
         if (actualTransition.getStatus() == Animation.Status.RUNNING) {
             return;
         }
@@ -265,14 +265,31 @@ public class AnimationControl implements IAnimationControl{
 
     @Override
     public boolean isNextTransition(){
-        if(actualTransition==null)return false;
-        //TODO
-        return true;
+        if(actualTransition==null) {
+			return false;
+		}
+		if (transitions.size() > nextTransition.get() + 1) {
+			return false;
+		}
+		return true;
+	}
+
+	public boolean isPreviousTransition() {
+		if (actualTransition == null) {
+			return false;
+		}
+		if (transitions.size() > 1
+				&& nextTransition.get() + 1 < transitions.size()) {
+			return true;
+		}
+		return false;
     }
 
     @Override
     public boolean isForwardTransition(){
-        if(actualTransition==null)return false;
+        if(actualTransition==null) {
+			return false;
+		}
         //TODO
         return true;
     }
