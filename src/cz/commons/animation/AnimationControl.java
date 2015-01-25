@@ -266,14 +266,14 @@ public class AnimationControl implements IAnimationControl{
     @Override
     public boolean isNextTransition(){
         if(actualTransition==null)return false;
-
+        //TODO
         return true;
     }
 
     @Override
     public boolean isForwardTransition(){
         if(actualTransition==null)return false;
-
+        //TODO
         return true;
     }
 
