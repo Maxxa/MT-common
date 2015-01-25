@@ -37,6 +37,7 @@ public class SimpleAnimationExample extends AbstractExample {
 			@Override
 			public void handle(ActionEvent event) {
 				ac.playForward();
+                controlIsNext();
 
 			}
 		});
@@ -45,10 +46,17 @@ public class SimpleAnimationExample extends AbstractExample {
 			@Override
 			public void handle(ActionEvent event) {
 				ac.goBack();
+                controlIsNext();
 
 			}
 		});
 	}
+
+    private void controlIsNext(){
+        System.out.println("Is forward: "+ ac.isForwardTransition());
+        System.out.println("Is next: "+ ac.isNextTransition());
+    }
+
 
 	@Override
 	protected void initPane(Pane canvas) {
