@@ -31,5 +31,5 @@ public interface IAnimationControl {
 
     boolean isNextTransition();
 
-    boolean isForwardTransition();
+    boolean isPreviousTransition();
 }

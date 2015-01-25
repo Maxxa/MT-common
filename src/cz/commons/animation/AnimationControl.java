@@ -8,7 +8,9 @@ import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.StrokeTransition;
 import javafx.animation.TranslateTransition;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,6 +23,8 @@ public class AnimationControl implements IAnimationControl{
     private ParallelTransition actualTransition;
 
     private IntegerProperty nextTransition = new SimpleIntegerProperty(0);
+    BooleanProperty isNext = new SimpleBooleanProperty();
+    BooleanProperty isForwards = new SimpleBooleanProperty();
     private ArrayList<ParallelTransition> transitions;
     private double rate;
     private boolean markedAsStepping;
@@ -274,6 +278,7 @@ public class AnimationControl implements IAnimationControl{
 		return true;
 	}
 
+    @Override
 	public boolean isPreviousTransition() {
 		if (actualTransition == null) {
 			return false;
@@ -284,15 +289,5 @@ public class AnimationControl implements IAnimationControl{
 		}
 		return false;
     }
-
-    @Override
-    public boolean isForwardTransition(){
-        if(actualTransition==null) {
-			return false;
-		}
-        //TODO
-        return true;
-    }
-
 
 }

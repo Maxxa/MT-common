@@ -53,7 +53,7 @@ public class SimpleAnimationExample extends AbstractExample {
 	}
 
     private void controlIsNext(){
-        System.out.println("Is forward: "+ ac.isForwardTransition());
+        System.out.println("Is previous: "+ ac.isPreviousTransition());
         System.out.println("Is next: "+ ac.isNextTransition());
     }
 
