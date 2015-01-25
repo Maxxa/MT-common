@@ -16,7 +16,7 @@ import javafx.event.EventHandler;
 /**
  * @author Viktor Krejčíř
  */
-public class AnimationControl {
+public class AnimationControl implements IAnimationControl{
 
     private ParallelTransition actualTransition;
 
@@ -33,11 +33,12 @@ public class AnimationControl {
 		rate = 1;
     }
 
-	/***
-	 * Get transition queue collection
-	 * 
-	 * @return list of transitions
-	 */
+    /***
+     * Get transition queue collection
+     *
+     * @return list of transitions
+     */
+    @Override
     public ArrayList<ParallelTransition> getTransitions() {
         return transitions;
     }
@@ -45,9 +46,10 @@ public class AnimationControl {
 	/***
 	 * Add handler that handles state of end of animation in forward direction
 	 * (last animation)
-	 * 
+	 *
 	 * @param ae
 	 */
+    @Override
     public void addAnimationFinishedListener(AnimationEvent ae) {
         finishedEvents.add(ae);
     }
@@ -55,6 +57,7 @@ public class AnimationControl {
 	/**
 	 * Toggles playing - if running pauses, if paused resumes
 	 */
+    @Override
     public void togglePlaying() {
         if (actualTransition != null) {
             if (actualTransition.getStatus() == Animation.Status.RUNNING) {
@@ -69,6 +72,7 @@ public class AnimationControl {
 	/**
 	 * Go step backward
 	 */
+    @Override
     public void goBack() {
         if(actualTransition==null) return;
         if (actualTransition.getStatus() == Animation.Status.RUNNING) {
@@ -79,31 +83,42 @@ public class AnimationControl {
             return;
         }
         playBack();
-
     }
 
     /**
 	 * Go step forward
 	 */
+    @Override
     public void goForth() {
-        if(actualTransition==null)return;
-        if (actualTransition.getStatus() == Animation.Status.RUNNING) {
+        if(actualTransition==null || transitions.size()==0) {
             return;
-        }
-        System.out.println("pis.....");
-        System.out.println(nextTransition.get());
-        System.out.println(transitions.size());
-        if (nextTransition.get() == transitions.size()) {
-            return;
+        }else{
+            if (actualTransition.getStatus() == Animation.Status.RUNNING) {
+                return;
+            }
+            if (nextTransition.get() == transitions.size()) {
+                return;
+            }
         }
         playForward();
     }
 
+    @Override
+    public void playForward() {
+        int index = nextTransition.get();
+        actualTransition = transitions.get(index);
+        setNodesToVisible(actualTransition);
+        actualTransition.setOnFinished(createForwardTransitionHandler());
+        actualTransition.setRate(1 * rate);
+        actualTransition.play();
+    }
+
 	/***
 	 * Sets rate (speed multiplier)
-	 * 
+	 *
 	 * @param rate
 	 */
+    @Override
     public void setRate(double rate) {
         if (actualTransition != null) {
             actualTransition.setRate(actualTransition.getRate() * rate);
@@ -175,7 +190,7 @@ public class AnimationControl {
 
 	/**
 	 * Mark as step-by step animation
-	 * 
+	 *
 	 * @param stepping
 	 *            if true animation pauses after each transition
 	 */
@@ -189,15 +204,6 @@ public class AnimationControl {
         setNodesToVisible(actualTransition);
         actualTransition.setOnFinished(createBackTransitionHandler());
         actualTransition.setRate(-1 * rate);
-        actualTransition.play();
-    }
-
-    public void playForward() {
-        int index = nextTransition.get();
-        actualTransition = transitions.get(index);
-        setNodesToVisible(actualTransition);
-        actualTransition.setOnFinished(createForwardTransitionHandler());
-        actualTransition.setRate(1 * rate);
         actualTransition.play();
     }
 
