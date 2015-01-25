@@ -33,12 +33,6 @@ public class AnimationControl implements IAnimationControl{
         markedAsStepping = false;
         finishedEvents = new LinkedList<>();
 		rate = 1;
-        nextTransition.addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number oldaVal, Number newVal) {
-                System.out.println(oldaVal+"  "+newVal);
-            }
-        });
     }
 
     /***
@@ -141,7 +135,6 @@ public class AnimationControl implements IAnimationControl{
 
             @Override
             public void handle(ActionEvent t) {
-                System.out.println("next transtiion +1");
                 nextTransition.set(nextTransition.get() + 1);
 
                 if (!markedAsStepping) {
@@ -167,7 +160,6 @@ public class AnimationControl implements IAnimationControl{
                         animationFinished(false);
                     }
                 }
-                System.out.println("next transition - 1");
                 nextTransition.set(nextTransition.get() - 1);
             }
         };
@@ -274,25 +266,16 @@ public class AnimationControl implements IAnimationControl{
     @Override
     public boolean isNextTransition(){
         if(actualTransition==null)return false;
-//        int idx = getNextTransitionId(true);
-//        System.out.print(idx + "  ");
+
         return true;
     }
 
     @Override
     public boolean isForwardTransition(){
         if(actualTransition==null)return false;
-//        int idx = getNextTransitionId(false);
-//        System.out.print(idx + "  ");
+
         return true;
     }
-//
-//    private int getNextTransitionId(boolean isForward){
-//        if (actualTransition.getStatus() == Animation.Status.RUNNING) {
-//            return nextTransition.get() + (isForward?-1:1);
-//        }
-//
-//        return nextTransition.get();
-//    }
+
 
 }
