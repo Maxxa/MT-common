@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
  * @author Vojtěch Müller
  */
 public abstract class StepEventHandler implements EventHandler<ActionEvent> {
+
     @Override
     public void handle(ActionEvent actionEvent) {
         if(actionEvent.getSource() instanceof Animation){
