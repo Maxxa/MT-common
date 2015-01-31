@@ -16,4 +16,16 @@ public class MoveElementEvent {
         this.oldPoint = oldPoint;
         this.newPoint = newPoint;
     }
+
+    public Integer getElementId() {
+        return elementId;
+    }
+
+    public Point2D getOldPoint() {
+        return oldPoint;
+    }
+
+    public Point2D getNewPoint() {
+        return newPoint;
+    }
 }

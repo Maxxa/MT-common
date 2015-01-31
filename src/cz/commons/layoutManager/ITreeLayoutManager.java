@@ -19,4 +19,7 @@ public interface ITreeLayoutManager {
 
     void clear();
 
+    boolean removeElement(Integer elementId);
+
+    void rebuildElements();
 }

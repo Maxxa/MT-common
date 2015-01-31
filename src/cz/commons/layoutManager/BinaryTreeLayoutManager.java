@@ -25,6 +25,7 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
     public BinaryTreeLayoutManager(final TreeLayoutSettings settings, Pane canvas) {
         this.settings = settings;
         this.canvas = canvas;
+        System.out.println(canvas.getWidth());
         rangeInfo = new CanvasRangeInfo((int) canvas.getWidth()/2);
         depthManager = new DepthManager(new IDefaultTreeInfo() {
             @Override
@@ -74,6 +75,7 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
         return info;
     }
 
+    @Override
     public boolean removeElement(Integer elementId){
         ElementInfo elementInfo = elementMap.get(elementId);
         if(elementInfo!=null){
@@ -141,5 +143,19 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
         elementMap.clear();
         depthManager.clear();
     }
+
+    /**
+     * This method set elements default position.
+     * */
+    @Override
+    public void rebuildElements() {
+        for (Map.Entry<Integer,ElementInfo> entry:elementMap.entrySet()){
+            ElementInfo currentInfo = entry.getValue();
+            Point2D point = getNodePosition(entry.getKey());
+            currentInfo.element.setTranslateX(point.getX());
+            currentInfo.element.setTranslateY(point.getY());
+        }
+    }
+
 
 }
