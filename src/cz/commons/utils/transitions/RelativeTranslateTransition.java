@@ -1,6 +1,8 @@
 package cz.commons.utils.transitions;
 
 import javafx.animation.TranslateTransition;
+import javafx.animation.TranslateTransitionBuilder;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.util.Duration;
 
@@ -27,6 +29,13 @@ public class RelativeTranslateTransition {
         tt.setDuration(duration);
         
         return tt;
+    }
+
+    public static TranslateTransition build(Node node, Point2D from,Point2D to, Duration duration) {
+        return TranslateTransitionBuilder.create()
+                .fromX(from.getX()).fromY(from.getY())
+                .toX(to.getX()).toY(to.getY())
+                .duration(duration).node(node).build();
     }
     
 }

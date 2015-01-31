@@ -30,15 +30,11 @@ public class ZoomHandler implements EventHandler<ScrollEvent> {
      */
     public static double MAX_SCALE = 10;
 
-    
-    
     public ZoomHandler(ScrollPane scrollPane, Pane canvas) {
         this.scrollPane = scrollPane;
         this.canvas = canvas;
     }
-    
-    
-    
+
     @Override
     public void handle(ScrollEvent e) {
         if (e.isControlDown()) {
