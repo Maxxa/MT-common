@@ -83,7 +83,7 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
     public boolean removeElement(Integer elementId, boolean removeFromCanvas){
         ElementInfo elementInfo = elementMap.get(elementId);
         if(elementInfo!=null){
-            if((elementInfo.depth+1)<=depthManager.getMaxDepth()){
+            if((elementInfo.depth+1)<depthManager.getMaxDepth()){
                 // My be exist child i must control.
                 Integer leftChild = BinaryTreeHelper.getLeftChildIndex(elementInfo.indexAtRow);
                 DepthRow depthRow = depthManager.getDepth(elementInfo.depth);
