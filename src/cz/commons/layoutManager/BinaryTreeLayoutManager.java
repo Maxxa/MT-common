@@ -25,7 +25,6 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
     public BinaryTreeLayoutManager(final TreeLayoutSettings settings, Pane canvas) {
         this.settings = settings;
         this.canvas = canvas;
-        System.out.println(canvas.getWidth());
         rangeInfo = new CanvasRangeInfo((int) canvas.getWidth()/2);
         depthManager = new DepthManager(new IDefaultTreeInfo() {
             @Override
@@ -105,17 +104,43 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
             depthManager.getDepth(firstInfo.depth).getNodeElement(firstInfo.indexAtRow).setElementId(secondId);
             depthManager.getDepth(secondInfo.depth).getNodeElement(secondInfo.indexAtRow).setElementId(firstId);
 
-            //swap elements info
             ElementInfo temp = new ElementInfo(null, firstInfo.getDepth(),firstInfo.getIndexAtRow(),firstInfo.getIdParent());
+
+            setChildrenNewParent(firstInfo,secondId);
+            setChildrenNewParent(secondInfo,firstId);
+
+            //swap elements info
             firstInfo.depth = secondInfo.getDepth();
             firstInfo.indexAtRow = secondInfo.getIndexAtRow();
-            firstInfo.idParent = secondInfo.getIdParent();
 
             secondInfo.depth = temp.getDepth();
             secondInfo.indexAtRow = temp.getIndexAtRow();
-            secondInfo.idParent = temp.getIdParent();
+
+            if(firstInfo.idParent!=secondId){
+                firstInfo.idParent = secondInfo.getIdParent();
+            }
+
+            if(temp.getIdParent()!=firstId){
+                secondInfo.idParent = temp.getIdParent();
+            }
+
         }
     }
+
+    private void setChildrenNewParent(ElementInfo firstInfo, Integer newParent) {
+        if((firstInfo.depth+1)<depthManager.getMaxDepth()){
+            Integer idxLeft = BinaryTreeHelper.getLeftChildIndex(firstInfo.indexAtRow);
+            Integer leftChildId = depthManager.getDepth(firstInfo.depth+1).getNodeElement(idxLeft).getElementId();
+            Integer rightChildId = depthManager.getDepth(firstInfo.depth+1).getNodeElement(idxLeft+1).getElementId();
+            if(leftChildId!=null){
+                getElementInfo(leftChildId).idParent=newParent;
+            }
+            if(rightChildId!=null){
+                getElementInfo(rightChildId).idParent=newParent;
+            }
+        }
+    }
+
 
     @Override
     public Point2D getNodePosition(Integer elementId) {
@@ -156,6 +181,5 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
             currentInfo.element.setTranslateY(point.getY());
         }
     }
-
 
 }

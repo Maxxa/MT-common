@@ -32,4 +32,9 @@ public class ElementInfo{
     public Integer getIdParent() {
         return idParent;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Ele [ %s ], Depth[ %s ],index at row [ %s ], id parent [ %s ]",element.getElementId(),depth,indexAtRow,idParent);
+    }
 }
