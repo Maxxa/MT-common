@@ -75,7 +75,12 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
     }
 
     @Override
-    public boolean removeElement(Integer elementId){
+    public boolean removeElement(Integer elementId) {
+        return removeElement(elementId,true);
+    }
+
+    @Override
+    public boolean removeElement(Integer elementId, boolean removeFromCanvas){
         ElementInfo elementInfo = elementMap.get(elementId);
         if(elementInfo!=null){
             if((elementInfo.depth+1)<=depthManager.getMaxDepth()){
@@ -90,7 +95,9 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
             }
             elementMap.remove(elementId);
             depthManager.getDepth(elementInfo.depth).getNodeElement(elementInfo.indexAtRow).setElementId(null);
-            canvas.getChildren().remove(elementInfo.element);
+            if(removeFromCanvas){
+                canvas.getChildren().remove(elementInfo.element);
+            }
             return true;
         }
         return false;
@@ -106,8 +113,8 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
 
             ElementInfo temp = new ElementInfo(null, firstInfo.getDepth(),firstInfo.getIndexAtRow(),firstInfo.getIdParent());
 
-            setChildrenNewParent(firstInfo,secondId);
-            setChildrenNewParent(secondInfo,firstId);
+            setChildrenNewParent(firstInfo, secondId);
+            setChildrenNewParent(secondInfo, firstId);
 
             //swap elements info
             firstInfo.depth = secondInfo.getDepth();

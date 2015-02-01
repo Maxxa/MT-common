@@ -21,5 +21,7 @@ public interface ITreeLayoutManager {
 
     boolean removeElement(Integer elementId);
 
+    boolean removeElement(Integer elementId,boolean removeFromCanvas);
+
     void rebuildElements();
 }
