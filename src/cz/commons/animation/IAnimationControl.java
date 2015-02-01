@@ -1,6 +1,7 @@
 package cz.commons.animation;
 
 import javafx.animation.ParallelTransition;
+import javafx.animation.Transition;
 
 import java.util.ArrayList;
 
@@ -17,7 +18,7 @@ public interface IAnimationControl {
 
     void setRate(double rate);
 
-    ArrayList<ParallelTransition> getTransitions();
+    ArrayList<Transition> getTransitions();
 
     void addAnimationFinishedListener(AnimationEvent ae);
 

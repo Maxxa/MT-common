@@ -3,15 +3,15 @@ package cz.commons.animation;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import javafx.animation.Animation;
-import javafx.animation.ParallelTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.StrokeTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
@@ -20,12 +20,10 @@ import javafx.event.EventHandler;
  */
 public class AnimationControl implements IAnimationControl{
 
-    private ParallelTransition actualTransition;
+    private Transition actualTransition;
 
     private IntegerProperty nextTransition = new SimpleIntegerProperty(0);
-    BooleanProperty isNext = new SimpleBooleanProperty();
-    BooleanProperty isForwards = new SimpleBooleanProperty();
-    private ArrayList<ParallelTransition> transitions;
+    private ArrayList<Transition> transitions;
     private double rate;
     private boolean markedAsStepping;
     private LinkedList<AnimationEvent> finishedEvents;
@@ -43,7 +41,7 @@ public class AnimationControl implements IAnimationControl{
      * @return list of transitions
      */
     @Override
-    public ArrayList<ParallelTransition> getTransitions() {
+    public ArrayList<Transition> getTransitions() {
         return transitions;
     }
 
@@ -114,14 +112,24 @@ public class AnimationControl implements IAnimationControl{
         int index = nextTransition.get();
         if(index < transitions.size()){
             actualTransition = transitions.get(index);
-            setNodesToVisible(actualTransition);
+            setNodesToVisible(getActualTransitionChildren());
             actualTransition.setOnFinished(createForwardTransitionHandler());
             actualTransition.setRate(1 * rate);
             actualTransition.play();
         }
     }
 
-	/***
+    private ObservableList<Animation> getActualTransitionChildren() {
+        if(actualTransition instanceof  ParallelTransition){
+            return  ((ParallelTransition) actualTransition).getChildren();
+        }
+        if(actualTransition instanceof  SequentialTransition){
+            return  ((SequentialTransition) actualTransition).getChildren();
+        }
+        return FXCollections.observableArrayList();
+    }
+
+    /***
 	 * Sets rate (speed multiplier)
 	 *
 	 * @param rate animation speed rate
@@ -172,7 +180,7 @@ public class AnimationControl implements IAnimationControl{
     protected void playPrevTransition() {
         int index = nextTransition.get();
         actualTransition = transitions.get(index);
-        setNodesToVisible(actualTransition);
+        setNodesToVisible(getActualTransitionChildren());
         actualTransition.setOnFinished(createBackTransitionHandler());
         actualTransition.setRate(-1 * rate);
         actualTransition.play();
@@ -181,7 +189,7 @@ public class AnimationControl implements IAnimationControl{
     protected void playNextTransition() {
         int index = nextTransition.get();
         actualTransition = transitions.get(index);
-        setNodesToVisible(actualTransition);
+        setNodesToVisible(getActualTransitionChildren());
         actualTransition.setOnFinished(createForwardTransitionHandler());
         actualTransition.setRate(1 * rate);
         actualTransition.play();
@@ -208,7 +216,7 @@ public class AnimationControl implements IAnimationControl{
     private void playBack() {
         int index = nextTransition.get() - 1;
         actualTransition = transitions.get(index);
-        setNodesToVisible(actualTransition);
+        setNodesToVisible(getActualTransitionChildren());
         actualTransition.setOnFinished(createBackTransitionHandler());
         actualTransition.setRate(-1 * rate);
         actualTransition.play();
@@ -219,10 +227,10 @@ public class AnimationControl implements IAnimationControl{
 	 * preventing image flickering. (blink effect) It also maintains that all
 	 * nodes will be visible while playing (if they were hidden for some reason)
 	 * 
-	 * @param pt parallel transition
+	 * @param animations animations
 	 */
-    private void setNodesToVisible(ParallelTransition pt) {
-        for (Animation a : pt.getChildren()) {
+    private void setNodesToVisible(ObservableList<Animation> animations) {
+        for (Animation a : animations) {
 
             if (a instanceof ScaleTransition) {
                 ScaleTransition st = (ScaleTransition) a;
@@ -242,7 +250,11 @@ public class AnimationControl implements IAnimationControl{
             }
             if (a instanceof ParallelTransition) {
                 ParallelTransition p = (ParallelTransition) a;
-                setNodesToVisible(p);
+                setNodesToVisible(p.getChildren());
+            }
+            if (a instanceof SequentialTransition) {
+                SequentialTransition s = (SequentialTransition) a;
+                setNodesToVisible(s.getChildren());
             }
         }
     }
