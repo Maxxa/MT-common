@@ -5,8 +5,6 @@ import javafx.animation.Transition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
-import javax.swing.*;
-
 /**
  * @author Vojtěch Müller
  */
