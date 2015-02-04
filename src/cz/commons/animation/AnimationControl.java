@@ -1,38 +1,32 @@
 package cz.commons.animation;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-
-import javafx.animation.*;
-import javafx.beans.property.BooleanProperty;
+import javafx.animation.Transition;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 /**
  * @author Viktor Krejčíř
+ * @author Vojtěch Müller
  */
 public class AnimationControl implements IAnimationControl{
 
-    private Transition actualTransition;
+    private final TransitionControl transitionControl;
+    private final ArrayList<Transition> transitions;
+    private final LinkedList<AnimationEvent> finishedEvents;
+
+    private boolean markedAsStepping = false;
 
     private IntegerProperty nextTransition = new SimpleIntegerProperty(0);
-    private ArrayList<Transition> transitions;
-    private double rate;
-    private boolean markedAsStepping;
-    private LinkedList<AnimationEvent> finishedEvents;
 
     public AnimationControl() {
         transitions = new ArrayList<>();
-        markedAsStepping = false;
         finishedEvents = new LinkedList<>();
-		rate = 1;
+        transitionControl = new TransitionControl();
     }
 
     /***
@@ -56,19 +50,13 @@ public class AnimationControl implements IAnimationControl{
         finishedEvents.add(ae);
     }
 
-	/**
+
+    /**
 	 * Toggles playing - if running pauses, if paused resumes
 	 */
     @Override
     public void togglePlaying() {
-        if (actualTransition != null) {
-            if (actualTransition.getStatus() == Animation.Status.RUNNING) {
-                actualTransition.pause();
-            }
-            if (actualTransition.getStatus() == Animation.Status.PAUSED) {
-                actualTransition.play();
-            }
-        }
+        transitionControl.togglePlaying();
     }
 
 	/**
@@ -76,14 +64,8 @@ public class AnimationControl implements IAnimationControl{
 	 */
     @Override
     public void goBack() {
-        if(actualTransition==null) {
-			return;
-		}
-        if (actualTransition.getStatus() == Animation.Status.RUNNING) {
-            return;
-        }
-
-        if (nextTransition.get() == 0) {
+        if(!transitionControl.isInitialize() ||
+                transitionControl.isPlayActualTransition()){
             return;
         }
         playBack();
@@ -94,40 +76,46 @@ public class AnimationControl implements IAnimationControl{
 	 */
     @Override
     public void goForth() {
-        if(actualTransition==null || transitions.size()==0) {
-            return;
-        }else{
-            if (actualTransition.getStatus() == Animation.Status.RUNNING) {
+        if(transitions.size()==0
+                || transitionControl.isPlayActualTransition()
+                || nextTransition.get() == transitions.size()) {
                 return;
-            }
-            if (nextTransition.get() == transitions.size()) {
-                return;
-            }
         }
+        System.out.println("begin");
         playForward();
     }
 
     @Override
     public void playForward() {
         int index = nextTransition.get();
+
         if(index < transitions.size()){
-            actualTransition = transitions.get(index);
-            setNodesToVisible(getActualTransitionChildren());
-            actualTransition.setOnFinished(createForwardTransitionHandler());
-            actualTransition.setRate(1 * rate);
-            actualTransition.play();
+            transitionControl.actualTransition = transitions.get(index);
+            transitionControl.playActualTransition(MovingType.FORWARD, createForwardTransitionHandler());
         }
     }
 
-    private ObservableList<Animation> getActualTransitionChildren() {
-        if(actualTransition instanceof  ParallelTransition){
-            return  ((ParallelTransition) actualTransition).getChildren();
+    private void playBack() {
+        int index = nextTransition.get()-1;
+        if(index>=0){
+            transitionControl.actualTransition = transitions.get(index);
+            transitionControl.playActualTransition(MovingType.BACK,createBackTransitionHandler());
         }
-        if(actualTransition instanceof  SequentialTransition){
-            return  ((SequentialTransition) actualTransition).getChildren();
-        }
-        return FXCollections.observableArrayList();
     }
+
+    protected void playPrevTransition() {
+        int index = nextTransition.get();
+        if(index<transitions.size()){
+            transitionControl.actualTransition = transitions.get(index);
+            transitionControl.playActualTransition(MovingType.BACK,createBackTransitionHandler());
+        }
+    }
+
+    protected void playNextTransition() {
+        transitionControl.actualTransition = transitions.get(nextTransition.get());
+        transitionControl.playActualTransition(MovingType.FORWARD, createForwardTransitionHandler());
+    }
+
 
     /***
 	 * Sets rate (speed multiplier)
@@ -136,24 +124,20 @@ public class AnimationControl implements IAnimationControl{
 	 */
     @Override
     public void setRate(double rate) {
-        if (actualTransition != null) {
-            actualTransition.setRate(actualTransition.getRate() * rate);
-        }
-        this.rate = rate;
+        transitionControl.setRate(rate);
     }
-
     protected EventHandler<ActionEvent> createForwardTransitionHandler() {
         return new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent t) {
-                nextTransition.set(nextTransition.get() + 1);
+                nextTransition();
 
                 if (!markedAsStepping) {
                     if (nextTransition.get() < transitions.size()) {
                         playNextTransition();
                     } else {
-                        animationFinished(true);
+                        animationFinished();
                     }
                 }
             }
@@ -169,37 +153,17 @@ public class AnimationControl implements IAnimationControl{
                     if (nextTransition.get() >= 0) {
                         playPrevTransition();
                     } else {
-                        animationFinished(false);
+                        animationFinished();
                     }
                 }
-                nextTransition.set(nextTransition.get() - 1);
+                backTransition();
             }
         };
     }
 
-    protected void playPrevTransition() {
-        int index = nextTransition.get();
-        actualTransition = transitions.get(index);
-        setNodesToVisible(getActualTransitionChildren());
-        actualTransition.setOnFinished(createBackTransitionHandler());
-        actualTransition.setRate(-1 * rate);
-        actualTransition.play();
-    }
-
-    protected void playNextTransition() {
-        int index = nextTransition.get();
-        actualTransition = transitions.get(index);
-        setNodesToVisible(getActualTransitionChildren());
-        actualTransition.setOnFinished(createForwardTransitionHandler());
-        actualTransition.setRate(1 * rate);
-        actualTransition.play();
-    }
-
-    protected void animationFinished(boolean wentForward) {
-        if (wentForward) {
-            for (AnimationEvent ae : finishedEvents) {
-                ae.handle();
-            }
+    protected void animationFinished() {
+        for (AnimationEvent ae : finishedEvents) {
+            ae.handle();
         }
     }
 
@@ -213,60 +177,15 @@ public class AnimationControl implements IAnimationControl{
         markedAsStepping = stepping;
     }
 
-    private void playBack() {
-        int index = nextTransition.get() - 1;
-        actualTransition = transitions.get(index);
-        setNodesToVisible(getActualTransitionChildren());
-        actualTransition.setOnFinished(createBackTransitionHandler());
-        actualTransition.setRate(-1 * rate);
-        actualTransition.play();
-    }
-
-	/**
-	 * Sets all children of parallel transition to visible. It can be useful for
-	 * preventing image flickering. (blink effect) It also maintains that all
-	 * nodes will be visible while playing (if they were hidden for some reason)
-	 * 
-	 * @param animations animations
-	 */
-    private void setNodesToVisible(ObservableList<Animation> animations) {
-        for (Animation a : animations) {
-
-            if (a instanceof ScaleTransition) {
-                ScaleTransition st = (ScaleTransition) a;
-                st.getNode().setScaleX(0);
-                st.getNode().setScaleY(0);
-                st.getNode().setVisible(true);
-            }
-            if (a instanceof TranslateTransition) {
-                TranslateTransition tt = (TranslateTransition) a;
-
-                tt.getNode().setVisible(true);
-            }
-            if (a instanceof StrokeTransition) {
-                StrokeTransition st = (StrokeTransition) a;
-
-                st.getShape().setVisible(true);
-            }
-            if (a instanceof ParallelTransition) {
-                ParallelTransition p = (ParallelTransition) a;
-                setNodesToVisible(p.getChildren());
-            }
-            if (a instanceof SequentialTransition) {
-                SequentialTransition s = (SequentialTransition) a;
-                setNodesToVisible(s.getChildren());
-            }
-        }
-    }
-
 	/**
 	 * Clear (flushes) the animation control and transition queue
-	 * 
+	 *
 	 */
     @Override
     public void clear() {
         nextTransition.setValue(0);
         transitions.clear();
+        transitionControl.clear();
     }
 
     @Override
@@ -280,26 +199,36 @@ public class AnimationControl implements IAnimationControl{
     }
 
     @Override
-    public boolean isNextTransition(){
-        if(actualTransition==null) {
-			return false;
-		}
-		if (transitions.size() > nextTransition.get() + 1) {
-			return false;
-		}
-		return true;
+    public Boolean isNextTransition(){
+       if(!transitionControl.isInitialize())
+           return false;
+       return getNextIndex()<transitions.size();
 	}
 
     @Override
-	public boolean isPreviousTransition() {
-		if (actualTransition == null) {
-			return false;
-		}
-		if (transitions.size() > 1
-				&& nextTransition.get() + 1 < transitions.size()) {
-			return true;
-		}
-		return false;
+	public Boolean isPreviousTransition() {
+        if(!transitionControl.isInitialize())
+            return false;
+        return getNextIndex()>0 && transitions.size() > 1;
     }
 
+    private Integer getNextIndex(){
+        int result = nextTransition.get();
+        if(transitionControl.isPlayActualTransition()){
+            if(transitionControl.actualTransition.getRate()<0){
+                result--;
+            }else{
+                result++;
+            }
+        }
+        return result;
+    }
+
+    private void nextTransition(){
+        nextTransition.setValue(nextTransition.get() + 1);
+    }
+
+    private void backTransition(){
+        nextTransition.setValue(nextTransition.getValue() - 1);
+    }
 }

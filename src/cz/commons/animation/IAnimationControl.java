@@ -1,6 +1,5 @@
 package cz.commons.animation;
 
-import javafx.animation.ParallelTransition;
 import javafx.animation.Transition;
 
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ public interface IAnimationControl {
 
     boolean isMarkedAsStepping();
 
-    boolean isNextTransition();
+    Boolean isNextTransition();
 
-    boolean isPreviousTransition();
+    Boolean isPreviousTransition();
 }
