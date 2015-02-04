@@ -1,13 +1,12 @@
 package cz.commons.example.graphics.layoutManager;
 
 import cz.commons.example.AbstractExample;
-import cz.commons.layoutManager.*;
+import cz.commons.layoutManager.BinaryTreeLayoutManager;
+import cz.commons.layoutManager.TreeLayoutSettings;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-
-import java.awt.*;
 
 /**
  * @author Vojtěch Müller
@@ -61,7 +60,6 @@ public class Example extends AbstractExample {
                 new BinaryElement(30,1,1,"s"),
                 new BinaryElement(31,1,1,"s"),
         };
-        Integer depth = 1;
 
         manager.addElement(elements[0],null,false);
 

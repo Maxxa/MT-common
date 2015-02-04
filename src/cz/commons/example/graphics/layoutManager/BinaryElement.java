@@ -26,6 +26,7 @@ public class BinaryElement extends BinaryNodeElement {
         backgroundRectangle.setStrokeType(StrokeType.INSIDE);
         backgroundRectangle.setStroke(Color.BLACK);
         backgroundRectangle.setFill(Color.YELLOW);
+        doParentBindings();
         this.getChildren().add(backgroundRectangle);
     }
 
