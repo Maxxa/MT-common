@@ -45,6 +45,7 @@ public class DepthRow {
     }
 
     public void recalculateLastDepth() {
+        setMaxWith();
         double offsetX = info.getCanvasInfo().getMinX();
         for (int i = 0; i < listNodes.size(); i++) {
             DepthRowNode node = listNodes.get(i);

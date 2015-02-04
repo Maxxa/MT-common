@@ -86,7 +86,7 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
             if((elementInfo.depth+1)<depthManager.getMaxDepth()){
                 // My be exist child i must control.
                 Integer leftChild = BinaryTreeHelper.getLeftChildIndex(elementInfo.indexAtRow);
-                DepthRow depthRow = depthManager.getDepth(elementInfo.depth);
+                DepthRow depthRow = depthManager.getDepth(elementInfo.depth+1);
                 DepthRowNode left = depthRow.getNodeElement(leftChild);
                 DepthRowNode right = depthRow.getNodeElement(leftChild+1);
                 if(left.getElementId()!=null || right.getElementId()!=null){
@@ -98,6 +98,7 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
             if(removeFromCanvas){
                 canvas.getChildren().remove(elementInfo.element);
             }
+            depthManager.controlRecalculationLastDepth();
             return true;
         }
         return false;

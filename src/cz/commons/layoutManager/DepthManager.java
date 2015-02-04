@@ -29,7 +29,7 @@ public class DepthManager {
     }
 
     public void removeLastDepth() {
-        depthRows.remove(depthRows.size());
+        depthRows.remove(depthRows.size()-1);
         boolean first = true;
         for (int i = depthRows.size()-1; i > 0; i--){
             if(first){
@@ -55,5 +55,17 @@ public class DepthManager {
 
     public void clear() {
         this.depthRows.clear();
+    }
+
+    public void controlRecalculationLastDepth() {
+        if(depthRows.size()>1){
+            DepthRow lastRow = this.depthRows.get(depthRows.size()-1);
+            for (int i = 0; i < BinaryTreeHelper.getCountElements(getMaxDepth()); i++) {
+               if(lastRow.getNodeElement(i).getElementId()!=null){
+                   return;
+               }
+            }
+            this.removeLastDepth();
+        }
     }
 }
