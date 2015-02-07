@@ -81,7 +81,6 @@ public class AnimationControl implements IAnimationControl{
                 || nextTransition.get() == transitions.size()) {
                 return;
         }
-        System.out.println("begin");
         playForward();
     }
 
@@ -94,7 +93,7 @@ public class AnimationControl implements IAnimationControl{
         }
     }
 
-    private void play(int index, MovingType type, EventHandler<ActionEvent> handler) {
+    private void play(int index, MovingType type, AnimationEvent handler) {
         transitionControl.actualTransition = transitions.get(index);
         transitionControl.playActualTransition(type,handler);
     }
@@ -106,18 +105,6 @@ public class AnimationControl implements IAnimationControl{
         }
     }
 
-    protected void playPrevTransition() {
-        int index = nextTransition.get();
-        if(index<transitions.size()){
-            play(index,MovingType.BACK,createBackTransitionHandler());
-        }
-    }
-
-    protected void playNextTransition() {
-        play(nextTransition.get(),MovingType.FORWARD,createForwardTransitionHandler());
-    }
-
-
     /***
 	 * Sets rate (speed multiplier)
 	 *
@@ -127,16 +114,15 @@ public class AnimationControl implements IAnimationControl{
     public void setRate(double rate) {
         transitionControl.setRate(rate);
     }
-    protected EventHandler<ActionEvent> createForwardTransitionHandler() {
-        return new EventHandler<ActionEvent>() {
+    protected AnimationEvent createForwardTransitionHandler() {
+        return new AnimationEvent() {
 
             @Override
-            public void handle(ActionEvent t) {
+            public void handle() {
                 nextTransition();
-
                 if (!markedAsStepping) {
                     if (nextTransition.get() < transitions.size()) {
-                        playNextTransition();
+                        playForward();
                     } else {
                         animationFinished();
                     }
@@ -145,19 +131,19 @@ public class AnimationControl implements IAnimationControl{
         };
     }
 
-    protected EventHandler<ActionEvent> createBackTransitionHandler() {
-        return new EventHandler<ActionEvent>() {
+    protected AnimationEvent createBackTransitionHandler() {
+        return new AnimationEvent() {
 
             @Override
-            public void handle(ActionEvent t) {
+            public void handle() {
+                backTransition();
                 if (!markedAsStepping) {
                     if (nextTransition.get() >= 0) {
-                        playPrevTransition();
+                        playBack();
                     } else {
                         animationFinished();
                     }
                 }
-                backTransition();
             }
         };
     }
@@ -201,15 +187,11 @@ public class AnimationControl implements IAnimationControl{
 
     @Override
     public Boolean isNextTransition(){
-       if(!transitionControl.isInitialize())
-           return false;
        return getNextIndex()<transitions.size();
 	}
 
     @Override
 	public Boolean isPreviousTransition() {
-        if(!transitionControl.isInitialize())
-            return false;
         return getNextIndex()>0 && transitions.size() > 1;
     }
 

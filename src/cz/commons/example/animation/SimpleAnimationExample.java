@@ -1,15 +1,14 @@
 package cz.commons.example.animation;
 
-import javafx.animation.ParallelTransition;
-import javafx.animation.TranslateTransition;
-import javafx.animation.TranslateTransitionBuilder;
+import cz.commons.animation.AnimationControl;
+import cz.commons.animation.AnimationControloL;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import cz.commons.animation.AnimationControl;
 import cz.commons.example.AbstractExample;
 import cz.commons.example.graphics.branchNode.ExampleBranchNode;
 
@@ -31,7 +30,6 @@ public class SimpleAnimationExample extends AbstractExample {
 	private void initHandlers() {
 		ac.markAsStepping(true);
 
-		
 		goForward.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
@@ -57,7 +55,6 @@ public class SimpleAnimationExample extends AbstractExample {
         System.out.println("Is next: "+ ac.isNextTransition());
     }
 
-
 	@Override
 	protected void initPane(Pane canvas) {
 		HBox menu = new HBox();
@@ -78,13 +75,53 @@ public class SimpleAnimationExample extends AbstractExample {
 	private void createAnimation() {
 		TranslateTransition tt;
 		TranslateTransition tt2;
-		tt = TranslateTransitionBuilder.create().fromX(0).fromY(50).toX(500)
+		TranslateTransition tt12;
+		tt = TranslateTransitionBuilder.create().fromX(0).fromY(50).toX(250)
+				.toY(50).duration(new Duration(1000)).node(node).build();
+
+
+        tt12 = TranslateTransitionBuilder.create().fromX(250).fromY(50).toX(500)
 				.toY(50).duration(new Duration(1000)).node(node).build();
 		tt2 = TranslateTransitionBuilder.create().fromX(500).fromY(50).toX(500)
 				.toY(250).duration(new Duration(1000)).node(node).build();
 
-		ac.getTransitions().add(new ParallelTransition(tt));
+        SequentialTransition sq = SequentialTransitionBuilder.create().
+                children(tt,tt12).build();
+        sq.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                System.err.println("END 1 sequention animation");
+            }
+        });
+        tt2.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                System.err.println("END 2 animation");
+            }
+        });
+
+       TranslateTransition tt3 = TranslateTransitionBuilder.create().fromX(500).fromY(250).toX(0)
+                .toY(250).duration(new Duration(1000)).node(node).build();
+        tt3.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                System.err.println("END 3 animation");
+            }
+        });
+        TranslateTransition tt4 = TranslateTransitionBuilder.create().fromX(0).fromY(250).toX(0)
+                .toY(50).duration(new Duration(1000)).node(node).build();
+        tt4.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                System.err.println("END 4 animation");
+            }
+        });
+		ac.getTransitions().add(sq);
 		ac.getTransitions().add(new ParallelTransition(tt2));
+		ac.getTransitions().add(new ParallelTransition(tt3));
+		ac.getTransitions().add(new ParallelTransition(tt4));
+
+//        ac.playForward();
 
 	}
 

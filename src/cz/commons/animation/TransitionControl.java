@@ -11,43 +11,33 @@ import javafx.event.EventHandler;
 class TransitionControl {
 
     protected Transition actualTransition = null;
-    private EventHandler<ActionEvent> oldHandler = null;
-    private EventHandler<ActionEvent> animationControlHandler = null;
     protected double rate;
 
     TransitionControl() {
        this.rate = 1;
     }
 
-    private EventHandler<ActionEvent> handler = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent actionEvent) {
-            if(oldHandler!=null){
-                go(oldHandler,actionEvent);
-                actualTransition.setOnFinished(oldHandler);
-            }
-            go(animationControlHandler,actionEvent);
-            actualTransition.setOnFinished(null);
-            oldHandler=animationControlHandler=null;
-        }
-
-        private void go(EventHandler<ActionEvent> event,ActionEvent actionEvent){
-            if(!handler.equals(event)){
-                event.handle(actionEvent);
-            }
-        }
-
-    };
-
-    protected void playActualTransition(MovingType movingType, EventHandler<ActionEvent> animationControlHandler){
+    protected synchronized void playActualTransition(MovingType movingType, AnimationEvent animationControlHandler){
         if(!isPlayActualTransition()){
-            this.animationControlHandler = animationControlHandler;
-            this.oldHandler = actualTransition.getOnFinished();
             AnimationsHelper.setNodesToVisible(AnimationsHelper.getTransitionChildren(actualTransition));
-            actualTransition.setOnFinished(handler);
+            initHandlers(animationControlHandler);
             actualTransition.setRate(movingType.getRate() * rate);
             actualTransition.play();
         }
+    }
+
+    private void initHandlers(AnimationEvent animationControlHandler) {
+        EventHandler<ActionEvent> currentHandler = actualTransition.getOnFinished();
+        AnimationEndHandler handler;
+        if(!AnimationEndHandler.class.isInstance(currentHandler)){
+            handler = new AnimationEndHandler();
+            handler.oldEventHandler = currentHandler;
+            actualTransition.setOnFinished(handler);
+        }else{
+            handler = (AnimationEndHandler) currentHandler;
+        }
+        handler.animationEvent = animationControlHandler;
+
     }
 
     public boolean isPlayActualTransition(){
@@ -71,9 +61,28 @@ class TransitionControl {
     }
 
     public void setRate(double rate) {
-        if (isInitialize()) {
-            actualTransition.setRate(actualTransition.getRate() * rate);
+        if (isPlayActualTransition()) {
+            MovingType type = actualTransition.getRate()<0?MovingType.BACK:MovingType.FORWARD;
+            actualTransition.setRate(type.getRate() * rate);
         }
         this.rate = rate;
+    }
+
+    private class AnimationEndHandler implements EventHandler<ActionEvent> {
+
+        EventHandler oldEventHandler;
+        private AnimationEvent animationEvent;
+
+        @Override
+        public void handle(ActionEvent actionEvent) {
+            go(oldEventHandler, actionEvent);
+            animationEvent.handle();
+        }
+
+        private void go(EventHandler<ActionEvent> event,ActionEvent actionEvent){
+            if(!AnimationEndHandler.class.isInstance(event) && event!=null){
+                event.handle(actionEvent);
+            }
+        }
     }
 }
