@@ -39,7 +39,6 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
         });
     }
 
-
     @Override
     public ElementInfo getElementInfo(Integer elementId){
         return elementMap.get(elementId);
@@ -148,7 +147,6 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
             }
         }
     }
-
 
     @Override
     public Point2D getNodePosition(Integer elementId) {
