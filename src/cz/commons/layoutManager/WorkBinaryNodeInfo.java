@@ -32,7 +32,10 @@ public class WorkBinaryNodeInfo {
 
     }
 
-    public ElementInfo getCurrentElement() {
+    /**
+     * This method return element info for current element
+     * */
+    public ElementInfo get() {
         return currentElementInfo;
     }
 
@@ -56,8 +59,8 @@ public class WorkBinaryNodeInfo {
             return String.format("IDX [%d] NODE [%d] (parent [%d]) -- left {%d}, right {%d} ",
                     currentElementInfo.indexAtRow, currentElementInfo.getElement().getElementId(),
                     currentElementInfo.getIdParent(),
-                    hasLeft()?leftChild.getElement().getElementId():null,
-                    hasRight()?rightChild.getElement().getElementId():null
+                    hasLeft() ? leftChild.getElement().getElementId() : null,
+                    hasRight() ? rightChild.getElement().getElementId() : null
             );
         }
     }
