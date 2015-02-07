@@ -15,6 +15,19 @@ public class TreeLayoutSettings {
         this(15,horizontalSpace,verticalSpace, widthNode,heightNode);
     }
 
+	/***
+	 * 
+	 * @param paddingTop
+	 *            Padding from top of the canvas
+	 * @param horizontalSpace
+	 *            Horizontal Spacing between the elements
+	 * @param verticalSpace
+	 *            Vertical spacing between the elements
+	 * @param widthNode
+	 *            Width of node element
+	 * @param heightNode
+	 *            Height of node element
+	 */
     public TreeLayoutSettings(Integer paddingTop, Integer horizontalSpace, Integer verticalSpace, Integer widthNode, Integer heightNode) {
         this.paddingTop = paddingTop;
         this.horizontalSpace = horizontalSpace;
