@@ -5,7 +5,7 @@ import javafx.scene.text.Font;
 /**
  * @author Vojtěch Müller
  */
-public class IGraphics {
+public interface IGraphics {
 
     /**
      * Vychozi velikost fontu v systemu respektujici aktualni DPI.
