@@ -1,14 +1,17 @@
 package cz.commons.example.animation;
 
-import cz.commons.animation.AnimationControl;
-import cz.commons.animation.AnimationControloL;
-import javafx.animation.*;
+import javafx.animation.ParallelTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.SequentialTransitionBuilder;
+import javafx.animation.TranslateTransition;
+import javafx.animation.TranslateTransitionBuilder;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import cz.commons.animation.AnimationControl;
 import cz.commons.example.AbstractExample;
 import cz.commons.example.graphics.branchNode.ExampleBranchNode;
 
