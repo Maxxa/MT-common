@@ -90,30 +90,31 @@ public class AnimationControl implements IAnimationControl{
         int index = nextTransition.get();
 
         if(index < transitions.size()){
-            transitionControl.actualTransition = transitions.get(index);
-            transitionControl.playActualTransition(MovingType.FORWARD, createForwardTransitionHandler());
+            play(index,MovingType.FORWARD,createForwardTransitionHandler());
         }
+    }
+
+    private void play(int index, MovingType type, EventHandler<ActionEvent> handler) {
+        transitionControl.actualTransition = transitions.get(index);
+        transitionControl.playActualTransition(type,handler);
     }
 
     private void playBack() {
         int index = nextTransition.get()-1;
         if(index>=0){
-            transitionControl.actualTransition = transitions.get(index);
-            transitionControl.playActualTransition(MovingType.BACK,createBackTransitionHandler());
+            play(index,MovingType.BACK,createBackTransitionHandler());
         }
     }
 
     protected void playPrevTransition() {
         int index = nextTransition.get();
         if(index<transitions.size()){
-            transitionControl.actualTransition = transitions.get(index);
-            transitionControl.playActualTransition(MovingType.BACK,createBackTransitionHandler());
+            play(index,MovingType.BACK,createBackTransitionHandler());
         }
     }
 
     protected void playNextTransition() {
-        transitionControl.actualTransition = transitions.get(nextTransition.get());
-        transitionControl.playActualTransition(MovingType.FORWARD, createForwardTransitionHandler());
+        play(nextTransition.get(),MovingType.FORWARD,createForwardTransitionHandler());
     }
 
 

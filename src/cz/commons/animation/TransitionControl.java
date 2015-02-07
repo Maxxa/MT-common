@@ -12,7 +12,7 @@ class TransitionControl {
 
     protected Transition actualTransition = null;
     private EventHandler<ActionEvent> oldHandler = null;
-    private EventHandler<ActionEvent> animationControlHandler=null;
+    private EventHandler<ActionEvent> animationControlHandler = null;
     protected double rate;
 
     TransitionControl() {
@@ -35,7 +35,6 @@ class TransitionControl {
             if(!handler.equals(event)){
                 event.handle(actionEvent);
             }
-
         }
 
     };
