@@ -190,4 +190,19 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
         }
     }
 
+    public void PrintDebug(){
+        for (int currentDepth = 0;currentDepth<depthManager.getMaxDepth();currentDepth++){
+            System.err.println("DEPTH : "+currentDepth);
+            DepthRow row = depthManager.getDepth(currentDepth);
+                for (int idxAtRow = 0;idxAtRow< BinaryTreeHelper.getCountElements(currentDepth)+1;idxAtRow++){
+                    DepthRowNode rowNode = row.getNodeElement(idxAtRow);
+                    if(rowNode.getElementId()!=null){
+                        WorkBinaryNodeInfo workInfo = WorkBinaryNodeInfoBuilder.getWorkInfo(rowNode.getElementId(), this);
+                        System.err.println(workInfo);
+                    }
+                }
+            System.err.println("_______");
+        }
+    }
+
 }
