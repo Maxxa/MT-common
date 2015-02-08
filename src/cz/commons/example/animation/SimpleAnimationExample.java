@@ -2,11 +2,7 @@ package cz.commons.example.animation;
 
 import cz.commons.animation.TransitionEndPositionType;
 import cz.commons.animation.TransitionFinishedEvent;
-import javafx.animation.ParallelTransition;
-import javafx.animation.SequentialTransition;
-import javafx.animation.SequentialTransitionBuilder;
-import javafx.animation.TranslateTransition;
-import javafx.animation.TranslateTransitionBuilder;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -90,6 +86,7 @@ public class SimpleAnimationExample extends AbstractExample {
 		TranslateTransition tt;
 		TranslateTransition tt2;
 		TranslateTransition tt12;
+        ScaleTransition sc = ScaleTransitionBuilder.create().node(node).fromX(0).fromY(0).toX(1).toY(1).duration(Duration.seconds(5)).build();
 		tt = TranslateTransitionBuilder.create().fromX(0).fromY(50).toX(250)
 				.toY(50).duration(new Duration(1000)).node(node).build();
 
@@ -130,6 +127,7 @@ public class SimpleAnimationExample extends AbstractExample {
                 System.err.println("END 4 animation");
             }
         });
+        ac.getTransitions().add(sc);
 		ac.getTransitions().add(sq);
 		ac.getTransitions().add(new ParallelTransition(tt2));
 		ac.getTransitions().add(new ParallelTransition(tt3));
