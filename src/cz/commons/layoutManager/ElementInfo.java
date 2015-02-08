@@ -17,6 +17,10 @@ public class ElementInfo{
         this.idParent = idParent;
     }
 
+    ElementInfo(ElementInfo copyElementInfo){
+        this(copyElementInfo.element,copyElementInfo.depth,copyElementInfo.indexAtRow,copyElementInfo.idParent);
+    }
+
     public Element getElement() {
         return element;
     }

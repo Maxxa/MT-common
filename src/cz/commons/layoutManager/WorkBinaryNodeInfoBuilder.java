@@ -20,9 +20,8 @@ public class WorkBinaryNodeInfoBuilder {
         return result;
     }
 
-
     private static ElementInfo getElementInfo(Integer elementId, ITreeLayoutManager manager) {
-        return elementId!=null?manager.getElementInfo(elementId):null;
+        return elementId!=null?new ElementInfo(manager.getElementInfo(elementId)):null;
     }
 
 }
