@@ -1,5 +1,7 @@
 package cz.commons.example.animation;
 
+import cz.commons.animation.TransitionEndPositionType;
+import cz.commons.animation.TransitionFinishedEvent;
 import javafx.animation.ParallelTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.SequentialTransitionBuilder;
@@ -22,6 +24,8 @@ public class SimpleAnimationExample extends AbstractExample {
 	private Button goBack = new Button("Back");
 	private ExampleBranchNode node = new ExampleBranchNode(0, 0, 50, 2);
 
+    private final Boolean IS_STEPPING = true;
+
 	private AnimationControl ac = new AnimationControl();
 	public SimpleAnimationExample() {
 		super();
@@ -31,7 +35,7 @@ public class SimpleAnimationExample extends AbstractExample {
 	}
 
 	private void initHandlers() {
-		ac.markAsStepping(true);
+		ac.markAsStepping(IS_STEPPING);
 
 		goForward.setOnAction(new EventHandler<ActionEvent>() {
 			
@@ -51,6 +55,13 @@ public class SimpleAnimationExample extends AbstractExample {
 
 			}
 		});
+
+        ac.addTransitionFinishedListener(new TransitionFinishedEvent() {
+            @Override
+            public void handle(TransitionEndPositionType type) {
+                System.out.println(type);
+            }
+        });
 	}
 
     private void controlIsNext(){
@@ -124,8 +135,9 @@ public class SimpleAnimationExample extends AbstractExample {
 		ac.getTransitions().add(new ParallelTransition(tt3));
 		ac.getTransitions().add(new ParallelTransition(tt4));
 
-//        ac.playForward();
-
+        if(!IS_STEPPING) {
+            ac.playForward();
+        }
 	}
 
 	public static void main(String[] args) {

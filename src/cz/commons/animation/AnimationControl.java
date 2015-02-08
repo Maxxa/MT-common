@@ -3,8 +3,6 @@ package cz.commons.animation;
 import javafx.animation.Transition;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -17,7 +15,7 @@ public class AnimationControl implements IAnimationControl{
 
     private final TransitionControl transitionControl;
     private final ArrayList<Transition> transitions;
-    private final LinkedList<AnimationEvent> finishedEvents;
+    private final LinkedList<TransitionFinishedEvent> finishedEvents;
 
     private boolean markedAsStepping = false;
 
@@ -43,11 +41,11 @@ public class AnimationControl implements IAnimationControl{
 	 * Add handler that handles state of end of animation in forward direction
 	 * (last animation)
 	 *
-	 * @param ae animation event
+	 * @param handler animation event
 	 */
     @Override
-    public void addAnimationFinishedListener(AnimationEvent ae) {
-        finishedEvents.add(ae);
+    public void addTransitionFinishedListener(TransitionFinishedEvent handler) {
+        finishedEvents.add(handler);
     }
 
 
@@ -120,11 +118,13 @@ public class AnimationControl implements IAnimationControl{
             @Override
             public void handle() {
                 nextTransition();
-                if (!markedAsStepping) {
+                if (markedAsStepping) {
+                    animationFinished(isNextTransition()? TransitionEndPositionType.NONE: TransitionEndPositionType.END);
+                }else{
                     if (nextTransition.get() < transitions.size()) {
                         playForward();
                     } else {
-                        animationFinished();
+                        animationFinished(TransitionEndPositionType.END);
                     }
                 }
             }
@@ -137,20 +137,23 @@ public class AnimationControl implements IAnimationControl{
             @Override
             public void handle() {
                 backTransition();
-                if (!markedAsStepping) {
-                    if (nextTransition.get() >= 0) {
+                if (markedAsStepping) {
+                    animationFinished(isPreviousTransition()? TransitionEndPositionType.NONE: TransitionEndPositionType.START);
+                }else{
+                    if (nextTransition.get() > 0) {
                         playBack();
                     } else {
-                        animationFinished();
+                        animationFinished(TransitionEndPositionType.START);
                     }
                 }
             }
+
         };
     }
 
-    protected void animationFinished() {
-        for (AnimationEvent ae : finishedEvents) {
-            ae.handle();
+    protected void animationFinished(TransitionEndPositionType type) {
+        for (TransitionFinishedEvent ae : finishedEvents) {
+            ae.handle(type);
         }
     }
 

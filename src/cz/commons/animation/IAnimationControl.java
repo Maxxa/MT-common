@@ -19,7 +19,7 @@ public interface IAnimationControl {
 
     ArrayList<Transition> getTransitions();
 
-    void addAnimationFinishedListener(AnimationEvent ae);
+    void addTransitionFinishedListener(TransitionFinishedEvent ae);
 
     void playForward();
 

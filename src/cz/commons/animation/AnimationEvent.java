@@ -1,5 +1,5 @@
 package cz.commons.animation;
 
-public interface AnimationEvent {
+interface AnimationEvent {
     void handle();
 }
