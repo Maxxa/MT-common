@@ -21,8 +21,8 @@ public class ElementInfo{
         this(copyElementInfo.element,copyElementInfo.depth,copyElementInfo.indexAtRow,copyElementInfo.idParent);
     }
 
-    public Element getElement() {
-        return element;
+    public <T extends Element> T getElement() {
+        return (T) element;
     }
 
     public Integer getDepth() {
