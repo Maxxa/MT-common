@@ -48,7 +48,6 @@ public class AnimationControl implements IAnimationControl{
         finishedEvents.add(handler);
     }
 
-
     /**
 	 * Toggles playing - if running pauses, if paused resumes
 	 */
@@ -112,6 +111,7 @@ public class AnimationControl implements IAnimationControl{
     public void setRate(double rate) {
         transitionControl.setRate(rate);
     }
+
     protected AnimationEvent createForwardTransitionHandler() {
         return new AnimationEvent() {
 
