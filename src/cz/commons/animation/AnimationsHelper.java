@@ -43,8 +43,11 @@ public final class AnimationsHelper {
             }
             if (a instanceof StrokeTransition) {
                 StrokeTransition st = (StrokeTransition) a;
-
                 st.getShape().setVisible(true);
+            }
+            if (a instanceof FadeTransition) {
+                FadeTransition ft = (FadeTransition) a;
+                ft.getNode().setVisible(true);
             }
             if (a instanceof ParallelTransition) {
                 ParallelTransition p = (ParallelTransition) a;
