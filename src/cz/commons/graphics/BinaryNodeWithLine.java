@@ -9,8 +9,8 @@ public abstract class BinaryNodeWithLine extends BinaryNodeElement {
 
     public BinaryNodeWithLine(int id, int keyWidth, int height) {
         super(id, keyWidth, height);
-        lineToChild[0] = new LineElement(this.getLeftChildConnector(),this);
-        lineToChild[1] = new LineElement(this.getRightChildConnector(),this);
+        lineToChild[0] = new LineElement(this.getLeftChildConnector(),this.getRightChildConnector());
+        lineToChild[1] = new LineElement(this.getRightChildConnector(),this.getLeftChildConnector());
         lineToChild[0].setVisible(false);
         lineToChild[1].setVisible(false);
     }
