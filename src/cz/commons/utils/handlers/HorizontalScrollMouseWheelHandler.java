@@ -1,4 +1,4 @@
-package cz.commons.utils;
+package cz.commons.utils.handlers;
 
 import javafx.event.EventHandler;
 import javafx.scene.control.ScrollPane;
