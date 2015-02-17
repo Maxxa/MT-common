@@ -3,6 +3,8 @@ package cz.commons.animation;
 import javafx.animation.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 
 /**
  * @author Vojtěch Müller
@@ -57,6 +59,28 @@ public final class AnimationsHelper {
                 SequentialTransition s = (SequentialTransition) a;
                 setNodesToVisible(s.getChildren());
             }
+        }
+    }
+
+    /**
+     * Control all animations witch childs is end handler instated of StepDirection
+     * and set this handler direction
+     * */
+    public static void controlAndSetEndHandlerDirections(Transition actualTransition, MovingType movingType) {
+        setDirection(actualTransition.getOnFinished(), movingType);
+        setDirectionForAllChilds(getTransitionChildren(actualTransition), movingType);
+    }
+
+    public static void setDirectionForAllChilds(ObservableList<Animation> animations, MovingType direction) {
+        for (Animation a : animations) {
+            setDirection(a.getOnFinished(),direction);
+            setDirectionForAllChilds(getTransitionChildren((Transition) a), direction);
+        }
+    }
+
+    public static void setDirection(EventHandler<ActionEvent> handler, MovingType direction){
+        if(handler!=null && StepDirection.class.isInstance(handler)){
+            ((StepDirection)handler).setDirection(direction);
         }
     }
 

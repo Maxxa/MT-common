@@ -20,13 +20,14 @@ class TransitionControl {
     protected synchronized void playActualTransition(MovingType movingType, AnimationEvent animationControlHandler){
         if(!isPlayActualTransition()){
             AnimationsHelper.setNodesToVisible(AnimationsHelper.getTransitionChildren(actualTransition));
+            AnimationsHelper.controlAndSetEndHandlerDirections(actualTransition, movingType);
             initHandlers(animationControlHandler);
             actualTransition.setRate(movingType.getRate() * rate);
             actualTransition.play();
         }
     }
 
-    private void initHandlers(AnimationEvent animationControlHandler) {
+    private synchronized void initHandlers(AnimationEvent animationControlHandler) {
         EventHandler<ActionEvent> currentHandler = actualTransition.getOnFinished();
         AnimationEndHandler handler;
         if(!AnimationEndHandler.class.isInstance(currentHandler)){

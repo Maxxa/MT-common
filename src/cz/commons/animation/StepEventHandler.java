@@ -7,18 +7,22 @@ import javafx.event.EventHandler;
 /**
  * @author Vojtěch Müller
  */
-public abstract class StepEventHandler implements EventHandler<ActionEvent> {
+public abstract class StepEventHandler implements EventHandler<ActionEvent>,StepDirection {
+
+    private MovingType direction = MovingType.FORWARD;
 
     @Override
     public void handle(ActionEvent actionEvent) {
-        if(actionEvent.getSource() instanceof Animation){
-            Animation animation = (Animation) actionEvent.getSource();
-            if(animation.getRate()<0){
-                handleBack(actionEvent);
-            }else{
-                handleForward(actionEvent);
-            }
+        if(MovingType.FORWARD.equals(direction)){
+            handleForward(actionEvent);
+        }else{
+            handleBack(actionEvent);
         }
+    }
+
+    @Override
+    public void setDirection(MovingType direction) {
+        this.direction=direction;
     }
 
     protected abstract void handleForward(ActionEvent actionEvent);
