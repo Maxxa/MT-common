@@ -74,7 +74,9 @@ public final class AnimationsHelper {
     public static void setDirectionForAllChilds(ObservableList<Animation> animations, MovingType direction) {
         for (Animation a : animations) {
             setDirection(a.getOnFinished(),direction);
-            setDirectionForAllChilds(getTransitionChildren((Transition) a), direction);
+            if(Transition.class.isInstance(a)){
+                setDirectionForAllChilds(getTransitionChildren((Transition) a), direction);
+            }
         }
     }
 
