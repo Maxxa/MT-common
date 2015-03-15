@@ -2,6 +2,7 @@ package cz.commons.example.graphics.branchNode;
 
 import cz.commons.graphics.BranchNodeElement;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -54,5 +55,13 @@ public class ExampleBranchNode extends BranchNodeElement {
     protected void doParentBindings() {
         centerX.bind(Bindings.add(Bindings.divide(background.widthProperty(), 2), translateXProperty()));
         centerY.bind(Bindings.add(translateYProperty(), 1));
+    }
+
+    public DoubleProperty widthProperty() {
+        return background.widthProperty();
+    }
+
+    public void setRectangleColor(Color rectangleColor) {
+        this.background.setFill(rectangleColor);
     }
 }
