@@ -69,7 +69,7 @@ class TransitionControl {
         this.rate = rate;
     }
 
-    private class AnimationEndHandler implements EventHandler<ActionEvent> {
+    protected class AnimationEndHandler implements EventHandler<ActionEvent> {
 
         EventHandler oldEventHandler;
         private AnimationEvent animationEvent;

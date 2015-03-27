@@ -12,11 +12,11 @@ import javafx.event.EventHandler;
 public final class AnimationsHelper {
 
     public static ObservableList<Animation> getTransitionChildren(Transition transition) {
-        if(transition instanceof  ParallelTransition){
-            return  ((ParallelTransition) transition).getChildren();
+        if (transition instanceof ParallelTransition) {
+            return ((ParallelTransition) transition).getChildren();
         }
-        if(transition instanceof  SequentialTransition){
-            return  ((SequentialTransition) transition).getChildren();
+        if (transition instanceof SequentialTransition) {
+            return ((SequentialTransition) transition).getChildren();
         }
         return FXCollections.observableArrayList();
     }
@@ -65,7 +65,7 @@ public final class AnimationsHelper {
     /**
      * Control all animations witch childs is end handler instated of StepDirection
      * and set this handler direction
-     * */
+     */
     public static void controlAndSetEndHandlerDirections(Transition actualTransition, MovingType movingType) {
         setDirection(actualTransition.getOnFinished(), movingType);
         setDirectionForAllChilds(getTransitionChildren(actualTransition), movingType);
@@ -73,16 +73,19 @@ public final class AnimationsHelper {
 
     public static void setDirectionForAllChilds(ObservableList<Animation> animations, MovingType direction) {
         for (Animation a : animations) {
-            setDirection(a.getOnFinished(),direction);
-            if(Transition.class.isInstance(a)){
+            setDirection(a.getOnFinished(), direction);
+            if (Transition.class.isInstance(a)) {
                 setDirectionForAllChilds(getTransitionChildren((Transition) a), direction);
             }
         }
     }
 
-    public static void setDirection(EventHandler<ActionEvent> handler, MovingType direction){
-        if(handler!=null && StepDirection.class.isInstance(handler)){
-            ((StepDirection)handler).setDirection(direction);
+    public static void setDirection(EventHandler<ActionEvent> handler, MovingType direction) {
+        if (handler != null && StepDirection.class.isInstance(handler)) {
+            ((StepDirection) handler).setDirection(direction);
+        }
+        if (handler != null && TransitionControl.AnimationEndHandler.class.isInstance(handler)) {
+            setDirection(((TransitionControl.AnimationEndHandler)handler).oldEventHandler,direction);
         }
     }
 
