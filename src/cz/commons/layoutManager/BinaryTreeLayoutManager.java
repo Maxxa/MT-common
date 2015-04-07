@@ -44,7 +44,13 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
         return elementMap.get(elementId);
     }
 
-    public ElementInfo addElement(Element element, Integer idParent,boolean isLeftChild){
+    @Override
+    public ElementInfo addElement(Element element, Integer idParent, boolean isLeftChild){
+        return addElement(element,idParent,isLeftChild,true);
+    }
+
+    @Override
+    public ElementInfo addElement(Element element, Integer idParent, boolean isLeftChild, boolean insertToCanvas) {
         Integer depth;
         Integer indexAtRow;
 
@@ -69,7 +75,9 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
         ElementInfo info = new ElementInfo(element,depth,indexAtRow,idParent);
         depthManager.getDepth(depth).getNodeElement(indexAtRow).setElementId(element.getElementId());
         elementMap.put(element.getElementId(),info);
-        canvas.getChildren().addAll(element);
+        if(insertToCanvas) {
+            canvas.getChildren().addAll(element);
+        }
         return info;
     }
 
