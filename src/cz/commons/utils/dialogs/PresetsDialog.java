@@ -78,6 +78,7 @@ public class PresetsDialog<V, P extends PresetItem<V>> extends Dialog.BaseDialog
         this.preset = preset;
         doLayout();
         comboBox.requestFocus();
+
     }
     
     public PresetsDialog(String title, Preset<V,P> preset) {
@@ -97,7 +98,7 @@ public class PresetsDialog<V, P extends PresetItem<V>> extends Dialog.BaseDialog
                 onComboboxChanged();
             }
         });
-        if (preset.getAll().size() > 0) comboBox.setValue(preset.getAll().get(0));
+        // if (preset.getAll().size() > 0) comboBox.setValue(preset.getAll().get(0));
         
         checkBox.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -105,7 +106,9 @@ public class PresetsDialog<V, P extends PresetItem<V>> extends Dialog.BaseDialog
                 animate = checkBox.isSelected();
             }
         });
-        
+        comboBox.setPromptText("Vyberte sadu");
+        comboBox.setPrefWidth(100);
+        comboBox.setMinWidth(100);
         itemsLabel.setStyle("-fx-padding: 10px 0 0 0;");
         itemsValuesLabel.setStyle("-fx-padding: 0 0 10px 0;");
         itemsValuesLabel.setWrapText(true);
