@@ -98,15 +98,15 @@ public class PresetsDialog<V, P extends PresetItem<V>> extends Dialog.BaseDialog
                 onComboboxChanged();
             }
         });
-        // if (preset.getAll().size() > 0) comboBox.setValue(preset.getAll().get(0));
-        
+        if (preset.getAll().size() > 0) comboBox.getSelectionModel().select(0);
+
         checkBox.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 animate = checkBox.isSelected();
             }
         });
-        comboBox.setPromptText("Vyberte sadu");
+        //comboBox.setPromptText("Vyberte sadu");
         comboBox.setPrefWidth(100);
         comboBox.setMinWidth(100);
         itemsLabel.setStyle("-fx-padding: 10px 0 0 0;");
