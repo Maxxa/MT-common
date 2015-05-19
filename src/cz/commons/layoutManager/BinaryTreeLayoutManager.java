@@ -196,7 +196,7 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
         }
     }
 
-    public void PrintDebug(){
+    public void printDebug(){
         for (int currentDepth = 0;currentDepth<depthManager.getMaxDepth();currentDepth++){
             int elementsCountAtRow= BinaryTreeHelper.getCountElements(currentDepth+1);
             System.err.println("DEPTH : "+currentDepth+" (elements["+elementsCountAtRow+"])");
