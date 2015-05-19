@@ -3,7 +3,7 @@ package cz.commons.layoutManager.helpers;
 /**
  * @author Vojtěch Müller
  */
-public interface ITreeStructure {
+public interface ITreeStructure extends Iterable<ITreeStructure>{
 
     Integer getIdParent();
 

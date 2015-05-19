@@ -1,5 +1,7 @@
 package cz.commons.layoutManager.helpers;
 
+import java.util.Iterator;
+
 /**
  * @author Vojtěch Müller
  */
@@ -85,6 +87,11 @@ public class TreeStructure implements ITreeStructure {
 
     @Override
     public String toString() {
-        return String.format("id: %s , parent: %s , is left child: %s",id,idParent,isLeftChild);
+        return String.format("id: %s , parent: %s , isLeft: %s",id,idParent,isLeftChild);
+    }
+
+    @Override
+    public Iterator<ITreeStructure> iterator() {
+        return new TreeStructureIterator(this);
     }
 }
