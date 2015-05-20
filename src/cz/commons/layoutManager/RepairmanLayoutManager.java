@@ -29,17 +29,18 @@ public class RepairmanLayoutManager {
         for (ITreeStructure structure : newChangeStructure) {
             ElementInfo currentNodeInfo = manager.getElementInfo(structure.getId());
             ElementInfo parentInfo = manager.getElementInfo(structure.getIdParent());
-            int parentDepth = parentInfo != null? parentInfo.getDepth():0;
-            int parentIndexAtRow = parentInfo!=null? parentInfo.getIndexAtRow():0;
-
-            currentNodeInfo.idParent = structure.getIdParent();
+            int parentDepth = parentInfo != null ? parentInfo.getDepth() : 0;
+            int parentIndexAtRow = parentInfo != null ? parentInfo.getIndexAtRow() : 0;
 
             //old position information...
             DepthRowNode oldNodePosition = getDepthRowNode(currentNodeInfo);
-            oldNodePosition.setElementId(null);
+            if (Integer.compare(structure.getId(),oldNodePosition.getElementId()) == 0) {
+                oldNodePosition.setElementId(null);
+            }
 
             // change new depth and index at row
-            currentNodeInfo.depth = parentDepth + 1;
+            currentNodeInfo.idParent = structure.getIdParent();
+            currentNodeInfo.depth = structure.isRoot() ? 0 : parentDepth + 1;
             currentNodeInfo.indexAtRow = structure.isLeftChild() ?
                     BinaryTreeHelper.getLeftChildIndex(parentIndexAtRow) : BinaryTreeHelper.getRightChildIndex(parentIndexAtRow);
 
@@ -47,8 +48,8 @@ public class RepairmanLayoutManager {
             DepthRowNode newNodePosition = getDepthRowNode(currentNodeInfo);
             newNodePosition.setElementId(structure.getId());
 
-            if(!oldNodePosition.getPoint().equals(newNodePosition.getPoint())){
-                result.add(new MoveElementEvent(structure.getId(),oldNodePosition.getPoint(),newNodePosition.getPoint()));
+            if (!oldNodePosition.getPoint().equals(newNodePosition.getPoint())) {
+                result.add(new MoveElementEvent(structure.getId(), oldNodePosition.getPoint(), newNodePosition.getPoint()));
             }
 
         }
@@ -69,11 +70,11 @@ public class RepairmanLayoutManager {
     }
 
     private DepthRowNode getDepthRowNode(ElementInfo info) {
+        System.out.println(info);
         if (info.getDepth() > manager.getDepthManager().getMaxDepth()) {
             manager.getDepthManager().addDepth();
         }
         return manager.getDepthManager().getDepth(info.depth).getNodeElement(info.indexAtRow);
     }
-
 
 }
