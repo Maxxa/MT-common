@@ -56,7 +56,7 @@ public class DepthRow {
     }
 
     public DepthRowNode getNodeElement(Integer index){
-        if(index > listNodes.size()) return null;
+        if(index >= listNodes.size()) return null;
         return listNodes.get(index);
     }
 
