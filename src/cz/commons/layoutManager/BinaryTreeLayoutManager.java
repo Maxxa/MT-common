@@ -12,41 +12,49 @@ import java.util.Map;
  */
 public class BinaryTreeLayoutManager implements ITreeLayoutManager {
 
-    protected Map<Integer,ElementInfo> elementMap = new HashMap<>();
+    protected Map<Integer, ElementInfo> elementMap = new HashMap<>();
 
-    protected final TreeLayoutSettings settings;
+    protected final IDefaultTreeInfo settings;
 
     protected final Pane canvas;
 
-    protected final CanvasRangeInfo rangeInfo;
-
     protected final DepthManager depthManager;
 
-    public BinaryTreeLayoutManager(final TreeLayoutSettings settings, Pane canvas) {
-        this.settings = settings;
+    protected final ILayoutChange layoutChange;
+
+    public BinaryTreeLayoutManager(final TreeLayoutSettings treeSettings, Pane canvas) {
+       this(treeSettings,canvas,PositionsChange.CALC_ALL_POINTS);
+
+    }
+    public BinaryTreeLayoutManager(final TreeLayoutSettings treeSettings, Pane canvas,PositionsChange change) {
         this.canvas = canvas;
-        rangeInfo = new CanvasRangeInfo((int) canvas.getWidth()/2);
-        depthManager = new DepthManager(new IDefaultTreeInfo() {
+        final CanvasRangeInfo rangeInfo = new CanvasRangeInfo((int) canvas.getWidth() / 2);
+        depthManager = new DepthManager();
+        settings = new IDefaultTreeInfo() {
             @Override
             public TreeLayoutSettings getLayoutSetting() {
-                return settings;
+                return treeSettings;
             }
 
             @Override
             public CanvasRangeInfo getCanvasInfo() {
                 return rangeInfo;
             }
-        });
+        };
+
+        layoutChange = PositionsChange.CALC_ALL_POINTS.equals(change)?
+                new LayoutNodesPositionDefault(depthManager, settings):
+                new LayoutNodesPositionInsertedNodes(depthManager, settings);
     }
 
     @Override
-    public ElementInfo getElementInfo(Integer elementId){
+    public ElementInfo getElementInfo(Integer elementId) {
         return elementMap.get(elementId);
     }
 
     @Override
-    public ElementInfo addElement(Element element, Integer idParent, boolean isLeftChild){
-        return addElement(element,idParent,isLeftChild,true);
+    public ElementInfo addElement(Element element, Integer idParent, boolean isLeftChild) {
+        return addElement(element, idParent, isLeftChild, true);
     }
 
     @Override
@@ -56,26 +64,27 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
 
         ElementInfo parentInfo = elementMap.get(idParent);
 
-        if(parentInfo!=null){
-            depth = parentInfo.depth+1;
-            if(isLeftChild){
+        if (parentInfo != null) {
+            depth = parentInfo.depth + 1;
+            if (isLeftChild) {
                 indexAtRow = BinaryTreeHelper.getLeftChildIndex(parentInfo.indexAtRow);
-            }else{
+            } else {
                 indexAtRow = BinaryTreeHelper.getRightChildIndex(parentInfo.indexAtRow);
             }
-        }else{
+        } else {
             depth = 0;
             indexAtRow = 0;
         }
 
-        if(depth>(depthManager.getMaxDepth()-1) || depth==0){
+        if (depth > (depthManager.getMaxDepth() - 1) || depth == 0) {
             depthManager.addDepth();
+            layoutChange.addRow();
         }
-
-        ElementInfo info = new ElementInfo(element,depth,indexAtRow,idParent);
+        ElementInfo info = new ElementInfo(element, depth, indexAtRow, idParent);
         depthManager.getDepth(depth).getNodeElement(indexAtRow).setElementId(element.getElementId());
-        elementMap.put(element.getElementId(),info);
-        if(insertToCanvas) {
+        layoutChange.addElement();
+        elementMap.put(element.getElementId(), info);
+        if (insertToCanvas) {
             canvas.getChildren().addAll(element);
         }
         return info;
@@ -83,43 +92,43 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
 
     @Override
     public boolean removeElement(Integer elementId) {
-        return removeElement(elementId,true);
+        return removeElement(elementId, true);
     }
 
     @Override
-    public boolean removeElement(Integer elementId, boolean removeFromCanvas){
+    public boolean removeElement(Integer elementId, boolean removeFromCanvas) {
         ElementInfo elementInfo = elementMap.get(elementId);
-        if(elementInfo!=null){
-            if((elementInfo.depth+1)<depthManager.getMaxDepth()){
+        if (elementInfo != null) {
+            if ((elementInfo.depth + 1) < depthManager.getMaxDepth()) {
                 // My be exist child i must control.
                 Integer leftChild = BinaryTreeHelper.getLeftChildIndex(elementInfo.indexAtRow);
-                DepthRow depthRow = depthManager.getDepth(elementInfo.depth+1);
+                DepthRow depthRow = depthManager.getDepth(elementInfo.depth + 1);
                 DepthRowNode left = depthRow.getNodeElement(leftChild);
-                DepthRowNode right = depthRow.getNodeElement(leftChild+1);
-                if(left.getElementId()!=null || right.getElementId()!=null){
+                DepthRowNode right = depthRow.getNodeElement(leftChild + 1);
+                if (left.getElementId() != null || right.getElementId() != null) {
                     return false;
                 }
             }
             elementMap.remove(elementId);
             depthManager.getDepth(elementInfo.depth).getNodeElement(elementInfo.indexAtRow).setElementId(null);
-            if(removeFromCanvas){
+            if (removeFromCanvas) {
                 canvas.getChildren().remove(elementInfo.element);
             }
-            depthManager.controlRecalculationLastDepth();
+            layoutChange.removeElement();
             return true;
         }
         return false;
     }
 
-    public void swapElement(Integer firstId,Integer secondId){
+    public void swapElement(Integer firstId, Integer secondId) {
         ElementInfo firstInfo = elementMap.get(firstId);
         ElementInfo secondInfo = elementMap.get(secondId);
-        if(firstInfo!=null && secondInfo!= null){
+        if (firstInfo != null && secondInfo != null) {
             //swap ids at Depth Manager.
             depthManager.getDepth(firstInfo.depth).getNodeElement(firstInfo.indexAtRow).setElementId(secondId);
             depthManager.getDepth(secondInfo.depth).getNodeElement(secondInfo.indexAtRow).setElementId(firstId);
 
-            ElementInfo temp = new ElementInfo(null, firstInfo.getDepth(),firstInfo.getIndexAtRow(),firstInfo.getIdParent());
+            ElementInfo temp = new ElementInfo(null, firstInfo.getDepth(), firstInfo.getIndexAtRow(), firstInfo.getIdParent());
 
             setChildrenNewParent(firstInfo, secondId);
             setChildrenNewParent(secondInfo, firstId);
@@ -131,11 +140,11 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
             secondInfo.depth = temp.getDepth();
             secondInfo.indexAtRow = temp.getIndexAtRow();
 
-            if(firstInfo.idParent!=secondId){
+            if (firstInfo.idParent != secondId) {
                 firstInfo.idParent = secondInfo.getIdParent();
             }
 
-            if(temp.getIdParent()!=firstId){
+            if (temp.getIdParent() != firstId) {
                 secondInfo.idParent = temp.getIdParent();
             }
 
@@ -143,15 +152,15 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
     }
 
     private void setChildrenNewParent(ElementInfo firstInfo, Integer newParent) {
-        if((firstInfo.depth+1)<depthManager.getMaxDepth()){
+        if ((firstInfo.depth + 1) < depthManager.getMaxDepth()) {
             Integer idxLeft = BinaryTreeHelper.getLeftChildIndex(firstInfo.indexAtRow);
-            Integer leftChildId = depthManager.getDepth(firstInfo.depth+1).getNodeElement(idxLeft).getElementId();
-            Integer rightChildId = depthManager.getDepth(firstInfo.depth+1).getNodeElement(idxLeft+1).getElementId();
-            if(leftChildId!=null){
-                getElementInfo(leftChildId).idParent=newParent;
+            Integer leftChildId = depthManager.getDepth(firstInfo.depth + 1).getNodeElement(idxLeft).getElementId();
+            Integer rightChildId = depthManager.getDepth(firstInfo.depth + 1).getNodeElement(idxLeft + 1).getElementId();
+            if (leftChildId != null) {
+                getElementInfo(leftChildId).idParent = newParent;
             }
-            if(rightChildId!=null){
-                getElementInfo(rightChildId).idParent=newParent;
+            if (rightChildId != null) {
+                getElementInfo(rightChildId).idParent = newParent;
             }
         }
     }
@@ -160,7 +169,7 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
     public Point2D getNodePosition(Integer elementId) {
         ElementInfo elementInfo = elementMap.get(elementId);
         Point2D result = null;
-        if(elementInfo!=null){
+        if (elementInfo != null) {
             result = depthManager.getDepth(elementInfo.getDepth()).getNodeElement(elementInfo.indexAtRow).getPoint();
         }
         return result;
@@ -185,10 +194,10 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
 
     /**
      * This method set elements default position.
-     * */
+     */
     @Override
     public void rebuildElements() {
-        for (Map.Entry<Integer,ElementInfo> entry:elementMap.entrySet()){
+        for (Map.Entry<Integer, ElementInfo> entry : elementMap.entrySet()) {
             ElementInfo currentInfo = entry.getValue();
             Point2D point = getNodePosition(entry.getKey());
             currentInfo.element.setTranslateX(point.getX());
@@ -196,22 +205,26 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
         }
     }
 
-    public void printDebug(){
+    public void printDebug() {
         System.out.println(depthManager.getMaxDepth());
-        for (int currentDepth = 0;currentDepth<depthManager.getMaxDepth();currentDepth++){
-            int elementsCountAtRow= BinaryTreeHelper.getCountElements(currentDepth+1);
-            System.err.println("DEPTH : "+currentDepth+" (elements["+elementsCountAtRow+"])");
+        for (int currentDepth = 0; currentDepth < depthManager.getMaxDepth(); currentDepth++) {
+            int elementsCountAtRow = BinaryTreeHelper.getCountElements(currentDepth + 1);
+            System.err.println("DEPTH : " + currentDepth + " (elements[" + elementsCountAtRow + "])");
             DepthRow row = depthManager.getDepth(currentDepth);
 
-                for (int idxAtRow = 0;idxAtRow< elementsCountAtRow;idxAtRow++){
-                    DepthRowNode rowNode = row.getNodeElement(idxAtRow);
-                    if(rowNode.getElementId()!=null){
-                        WorkBinaryNodeInfo workInfo = WorkBinaryNodeInfoBuilder.getWorkInfo(rowNode.getElementId(), this);
-                        System.err.println(workInfo);
-                    }
+            for (int idxAtRow = 0; idxAtRow < elementsCountAtRow; idxAtRow++) {
+                DepthRowNode rowNode = row.getNodeElement(idxAtRow);
+                if (rowNode.getElementId() != null) {
+                    WorkBinaryNodeInfo workInfo = WorkBinaryNodeInfoBuilder.getWorkInfo(rowNode.getElementId(), this);
+                    System.err.println(workInfo);
                 }
+            }
             System.err.println("_______");
         }
+    }
+
+    public enum PositionsChange{
+        CALC_ALL_POINTS,CALC_ONLY_INSERTED_NODES
     }
 
 }

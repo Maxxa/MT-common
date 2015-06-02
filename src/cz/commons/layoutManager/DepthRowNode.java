@@ -5,29 +5,33 @@ import javafx.geometry.Point2D;
 /**
  * @author Vojtěch Müller
  */
-public class DepthRowNode {
+class DepthRowNode {
 
     private Integer elementId;
     private Point2D point;
 
-    public DepthRowNode(Point2D point) {
+    DepthRowNode(Point2D point) {
         this.point = point;
     }
 
-    public Integer getElementId() {
+    Integer getElementId() {
         return elementId;
     }
 
-    public void setElementId(Integer elementId) {
+    void setElementId(Integer elementId) {
         this.elementId = elementId;
     }
 
-    public Point2D getPoint() {
+    Point2D getPoint() {
         return point;
     }
 
-    protected void setPoint(Point2D point) {
+    void setPoint(Point2D point) {
         this.point = point;
+    }
+
+    boolean containsElement(){
+        return elementId!=null;
     }
 
 }
