@@ -3,10 +3,7 @@ package cz.commons.layoutManager;
 import cz.commons.layoutManager.helpers.ITreeStructure;
 import javafx.geometry.Point2D;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This component reconstruct layout manager for changes in the structure.
@@ -19,9 +16,15 @@ public class RepairmanLayoutManager {
 
     private final ITreeStructure newChangeStructure;
 
+    private final Set<Integer> ignoresMovingIds = new HashSet<>();
+
     public RepairmanLayoutManager(BinaryTreeLayoutManager manager, ITreeStructure newChangeStructure) {
         this.manager = manager;
         this.newChangeStructure = newChangeStructure;
+    }
+
+    public void addIgnoreId(Integer id){
+        ignoresMovingIds.add(id);
     }
 
     /**
@@ -48,7 +51,9 @@ public class RepairmanLayoutManager {
             DepthRowNode newNodePosition = getDepthRowNode(currentNodeInfo);
             newNodePosition.setElementId(structure.getId());
 
-            result.add(new MoveElementEvent(structure.getId(), oldPositions.get(structure.getId()), newNodePosition.getPoint()));
+            if(!ignoresMovingIds.contains(structure.getId())){
+                result.add(new MoveElementEvent(structure.getId(), oldPositions.get(structure.getId()), newNodePosition.getPoint()));
+            }
         }
         controlLastDepth();
         return result;

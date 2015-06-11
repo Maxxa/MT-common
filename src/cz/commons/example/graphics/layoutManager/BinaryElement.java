@@ -2,6 +2,7 @@ package cz.commons.example.graphics.layoutManager;
 
 import cz.commons.graphics.BinaryNodeElement;
 import javafx.beans.binding.Bindings;
+import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -21,7 +22,9 @@ public class BinaryElement extends BinaryNodeElement {
         super(id, 25, 20);
         setTranslateX(x);
         setTranslateY(y);
-
+        Tooltip tooltip = new Tooltip();
+        tooltip.setText(String.valueOf(id));
+        Tooltip.install(this,tooltip);
         backgroundRectangle = new Rectangle(width, height);
         backgroundRectangle.setStrokeType(StrokeType.INSIDE);
         backgroundRectangle.setStroke(Color.BLACK);
