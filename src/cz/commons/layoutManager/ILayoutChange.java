@@ -11,4 +11,10 @@ public interface ILayoutChange {
 
     void removeElement();
 
+    void refresh();
+
+    void disableGenerateEvent();
+
+    void enableGenerateEvent();
+
 }

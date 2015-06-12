@@ -200,9 +200,16 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
         for (Map.Entry<Integer, ElementInfo> entry : elementMap.entrySet()) {
             ElementInfo currentInfo = entry.getValue();
             Point2D point = getNodePosition(entry.getKey());
-            currentInfo.element.setTranslateX(point.getX());
-            currentInfo.element.setTranslateY(point.getY());
+            if(point!=null){
+                currentInfo.element.setTranslateX(point.getX());
+                currentInfo.element.setTranslateY(point.getY());
+            }
         }
+    }
+
+    @Override
+    public ILayoutChange getLayoutChange() {
+        return layoutChange;
     }
 
     public void printDebug() {

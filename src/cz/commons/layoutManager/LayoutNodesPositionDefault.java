@@ -9,6 +9,7 @@ public class LayoutNodesPositionDefault implements ILayoutChange {
 
     private final DepthManager depthManager;
     private final IDefaultTreeInfo info;
+    private boolean isEnableGenerateEvent = true;
 
     public LayoutNodesPositionDefault(DepthManager depthManager, IDefaultTreeInfo info) {
         this.depthManager = depthManager;
@@ -53,6 +54,21 @@ public class LayoutNodesPositionDefault implements ILayoutChange {
         }
     }
 
+    @Override
+    public void refresh() {
+        throw new UnsupportedOperationException("Refresh for default nodes position counter is not enabled.");
+    }
+
+    @Override
+    public void disableGenerateEvent() {
+        this.isEnableGenerateEvent = false;
+    }
+
+    @Override
+    public void enableGenerateEvent() {
+        this.isEnableGenerateEvent = true;
+    }
+
     /**
      * Method init row for last level.
      */
@@ -68,7 +84,7 @@ public class LayoutNodesPositionDefault implements ILayoutChange {
     }
 
     private void movePoint(DepthRowNode node, Point2D newPoint) {
-        if (node.getElementId() != null) {
+        if (node.getElementId() != null && isEnableGenerateEvent) {
             depthManager.eventBus.post(new MoveElementEvent(node.getElementId(), node.getPoint(), newPoint));
         }
         node.setPoint(newPoint);

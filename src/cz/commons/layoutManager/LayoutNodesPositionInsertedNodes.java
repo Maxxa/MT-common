@@ -11,6 +11,7 @@ public class LayoutNodesPositionInsertedNodes implements ILayoutChange {
 
     private final DepthManager depthManager;
     private final IDefaultTreeInfo settings;
+    private boolean isEnableGenerateEvent = true;
 
     public LayoutNodesPositionInsertedNodes(DepthManager depthManager, IDefaultTreeInfo settings) {
         this.depthManager = depthManager;
@@ -32,35 +33,50 @@ public class LayoutNodesPositionInsertedNodes implements ILayoutChange {
         recalculatePosition();
     }
 
+    @Override
+    public void refresh() {
+        recalculatePosition();
+    }
+
+    @Override
+    public void disableGenerateEvent() {
+        this.isEnableGenerateEvent = false;
+    }
+
+    @Override
+    public void enableGenerateEvent() {
+        this.isEnableGenerateEvent = true;
+    }
+
     private void recalculatePosition() {
         TreeToList treeToList = new TreeToList(depthManager);
         Integer indexRoot = treeToList.getIndexRoot();
         LinkedList<ListTreeInfo> listTree = treeToList.getListTree();
         TreeLayoutSettings layoutSetting = this.settings.getLayoutSetting();
-        System.out.println("____________ start "+indexRoot);
+        System.out.println("____________ start " + indexRoot);
         final double colSize = layoutSetting.getVerticalSpace() + layoutSetting.getWidthNode();
-        final double space = layoutSetting.getVerticalSpace()/2;
+        final double space = layoutSetting.getVerticalSpace() / 2;
 
 
         for (int i = 0; i < listTree.size(); i++) {
             ListTreeInfo info = listTree.get(i);
             DepthRowNode node = depthManager.getDepth(info.getDepth()).getNodeElement(info.getIndexAtRow());
-            double positionY = BinaryTreeHelper.getDepthYPosition(info.getDepth()+1, settings.getLayoutSetting());
+            double positionY = BinaryTreeHelper.getDepthYPosition(info.getDepth() + 1, settings.getLayoutSetting());
             double positionX;
             if (i < indexRoot) {
                 positionX = settings.getCanvasInfo().getCenterX() - colSize / 2
-                            - (indexRoot - i) * colSize;
+                        - (indexRoot - i) * colSize;
                 System.out.println(positionX);
-                positionX-=space;
+                positionX -= space;
             } else if (i > indexRoot) {
                 positionX = settings.getCanvasInfo().getCenterX() + colSize / 2
-                        + (i - indexRoot-1) * colSize;
-                positionX+=space;
+                        + (i - indexRoot - 1) * colSize;
+                positionX += space;
             } else {
                 positionX = settings.getCanvasInfo().getCenterX() - colSize / 2;
-                positionX+=space;
+                positionX += space;
             }
-            controlNode(node,positionX, positionY
+            controlNode(node, positionX, positionY
             );
         }
         System.out.println("____________ end");
@@ -68,7 +84,14 @@ public class LayoutNodesPositionInsertedNodes implements ILayoutChange {
     }
 
     private void controlNode(DepthRowNode node, double positionX, double positionY) {
-        node.setPoint(new Point2D(positionX,positionY));
+        Point2D oldPoint = node.getPoint();
+        Point2D newPoint = new Point2D(positionX, positionY);
+        node.setPoint(new Point2D(positionX, positionY));
+        if (isEnableGenerateEvent) {
+            if (Double.compare(oldPoint.getX(),newPoint.getX())!=0) {
+                depthManager.eventBus.post(new MoveElementEvent(node.getElementId(), oldPoint, newPoint));
+            }
+        }
     }
 
 

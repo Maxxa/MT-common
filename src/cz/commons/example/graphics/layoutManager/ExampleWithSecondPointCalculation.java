@@ -2,16 +2,10 @@ package cz.commons.example.graphics.layoutManager;
 
 import cz.commons.example.AbstractExample;
 import cz.commons.layoutManager.BinaryTreeLayoutManager;
-import cz.commons.layoutManager.ListTreeInfo;
 import cz.commons.layoutManager.TreeLayoutSettings;
-import cz.commons.layoutManager.TreeToList;
-import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-
-import java.util.LinkedList;
-import java.util.Map;
 
 /**
  * @author Vojtěch Müller
@@ -102,25 +96,7 @@ public class ExampleWithSecondPointCalculation extends AbstractExample {
         manager.addElement(elements[29],15,true);
         manager.addElement(elements[30],15,false);
 
-
-        for (int i = 0; i <elements.length ; i++) {
-            Point2D point = manager.getNodePosition(elements[i].getElementId());
-//            System.out.println(point);
-            if(point!=null){
-                elements[i].setTranslateX(point.getX());
-                elements[i].setTranslateY(point.getY());
-            }
-        }
-
-        TreeToList treeToList = new TreeToList(manager.getDepthManager());
-        LinkedList<ListTreeInfo> listTree = treeToList.getListTree();
-        int i = 0;
-        for (ListTreeInfo info:listTree){
-            System.out.println(i+" => "+info);
-            i++;
-        }
-
-        manager.getDepthManager();
+        manager.rebuildElements();
     }
 
     private void initCenterLine(Pane canvas) {

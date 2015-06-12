@@ -9,7 +9,6 @@ import javafx.scene.layout.Pane;
  */
 public interface ITreeLayoutManager {
 
-
     ElementInfo getElementInfo(Integer elementId);
 
     Point2D getNodePosition(Integer elementId);
@@ -29,4 +28,6 @@ public interface ITreeLayoutManager {
     boolean removeElement(Integer elementId,boolean removeFromCanvas);
 
     void rebuildElements();
+
+    ILayoutChange getLayoutChange();
 }
