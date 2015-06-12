@@ -53,7 +53,6 @@ public class LayoutNodesPositionInsertedNodes implements ILayoutChange {
         Integer indexRoot = treeToList.getIndexRoot();
         LinkedList<ListTreeInfo> listTree = treeToList.getListTree();
         TreeLayoutSettings layoutSetting = this.settings.getLayoutSetting();
-        System.out.println("____________ start " + indexRoot);
         final double colSize = layoutSetting.getVerticalSpace() + layoutSetting.getWidthNode();
         final double space = layoutSetting.getVerticalSpace() / 2;
 
@@ -66,7 +65,6 @@ public class LayoutNodesPositionInsertedNodes implements ILayoutChange {
             if (i < indexRoot) {
                 positionX = settings.getCanvasInfo().getCenterX() - colSize / 2
                         - (indexRoot - i) * colSize;
-                System.out.println(positionX);
                 positionX -= space;
             } else if (i > indexRoot) {
                 positionX = settings.getCanvasInfo().getCenterX() + colSize / 2
@@ -79,8 +77,6 @@ public class LayoutNodesPositionInsertedNodes implements ILayoutChange {
             controlNode(node, positionX, positionY
             );
         }
-        System.out.println("____________ end");
-
     }
 
     private void controlNode(DepthRowNode node, double positionX, double positionY) {
@@ -88,7 +84,7 @@ public class LayoutNodesPositionInsertedNodes implements ILayoutChange {
         Point2D newPoint = new Point2D(positionX, positionY);
         node.setPoint(new Point2D(positionX, positionY));
         if (isEnableGenerateEvent) {
-            if (Double.compare(oldPoint.getX(),newPoint.getX())!=0) {
+            if (Double.compare(oldPoint.getX(),newPoint.getX())!=0 && oldPoint.getX()!=0) {
                 depthManager.eventBus.post(new MoveElementEvent(node.getElementId(), oldPoint, newPoint));
             }
         }

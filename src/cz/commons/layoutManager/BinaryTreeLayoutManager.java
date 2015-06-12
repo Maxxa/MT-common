@@ -80,10 +80,13 @@ public class BinaryTreeLayoutManager implements ITreeLayoutManager {
             depthManager.addDepth();
             layoutChange.addRow();
         }
+
         ElementInfo info = new ElementInfo(element, depth, indexAtRow, idParent);
         depthManager.getDepth(depth).getNodeElement(indexAtRow).setElementId(element.getElementId());
-        layoutChange.addElement();
         elementMap.put(element.getElementId(), info);
+        layoutChange.addElement();
+
+
         if (insertToCanvas) {
             canvas.getChildren().addAll(element);
         }
