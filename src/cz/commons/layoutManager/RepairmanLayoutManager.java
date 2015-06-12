@@ -33,7 +33,6 @@ public class RepairmanLayoutManager {
     public List<MoveElementEvent> reconstruction() {
         Map<Integer, Point2D> oldPositions= buildOldPositions();
 
-        List<MoveElementEvent> result = new LinkedList<>();
         for (ITreeStructure structure : newChangeStructure) {
             ElementInfo currentNodeInfo = manager.getElementInfo(structure.getId());
 
@@ -50,12 +49,25 @@ public class RepairmanLayoutManager {
             //set new positions information
             DepthRowNode newNodePosition = getDepthRowNode(currentNodeInfo);
             newNodePosition.setElementId(structure.getId());
+        }
 
-            if(!ignoresMovingIds.contains(structure.getId())){
-                result.add(new MoveElementEvent(structure.getId(), oldPositions.get(structure.getId()), newNodePosition.getPoint()));
+        manager.layoutChange.disableGenerateEvent();
+        manager.getLayoutChange().refresh();
+        manager.layoutChange.enableGenerateEvent();
+        List<MoveElementEvent> result = generateEvents(oldPositions);
+
+        controlLastDepth();
+        return result;
+    }
+
+    private List<MoveElementEvent> generateEvents(Map<Integer, Point2D> oldPositions) {
+        List<MoveElementEvent> result = new LinkedList<>();
+        for (Map.Entry<Integer,Point2D> entry:oldPositions.entrySet()){
+            Integer id = entry.getKey();
+            if(!ignoresMovingIds.contains(id)){
+                result.add(new MoveElementEvent(id, entry.getValue(), manager.getNodePosition(id)));
             }
         }
-        controlLastDepth();
         return result;
     }
 

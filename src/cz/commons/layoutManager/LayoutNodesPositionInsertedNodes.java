@@ -56,7 +56,6 @@ public class LayoutNodesPositionInsertedNodes implements ILayoutChange {
         final double colSize = layoutSetting.getVerticalSpace() + layoutSetting.getWidthNode();
         final double space = layoutSetting.getVerticalSpace() / 2;
 
-
         for (int i = 0; i < listTree.size(); i++) {
             ListTreeInfo info = listTree.get(i);
             DepthRowNode node = depthManager.getDepth(info.getDepth()).getNodeElement(info.getIndexAtRow());
@@ -77,6 +76,19 @@ public class LayoutNodesPositionInsertedNodes implements ILayoutChange {
             controlNode(node, positionX, positionY
             );
         }
+        clearEmptyNodes();
+    }
+
+    private void clearEmptyNodes() {
+        for (int i = 0; i < depthManager.getMaxDepth(); i++) {
+            DepthRow row = depthManager.getDepth(i);
+            for (int j = 0; j < row.getMaxSize(); j++) {
+                DepthRowNode nodeElement = row.getNodeElement(j);
+                if (!nodeElement.containsElement()) {
+                    nodeElement.setPoint(new Point2D(0, 0));
+                }
+            }
+        }
     }
 
     private void controlNode(DepthRowNode node, double positionX, double positionY) {
@@ -84,11 +96,10 @@ public class LayoutNodesPositionInsertedNodes implements ILayoutChange {
         Point2D newPoint = new Point2D(positionX, positionY);
         node.setPoint(new Point2D(positionX, positionY));
         if (isEnableGenerateEvent) {
-            if (Double.compare(oldPoint.getX(),newPoint.getX())!=0 && oldPoint.getX()!=0) {
+            if (Double.compare(oldPoint.getX(), newPoint.getX()) != 0 && oldPoint.getX() != 0) {
                 depthManager.eventBus.post(new MoveElementEvent(node.getElementId(), oldPoint, newPoint));
             }
         }
     }
-
 
 }
