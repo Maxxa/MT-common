@@ -84,7 +84,6 @@ public class RepairmanLayoutManager {
 
     private void controlLastDepth() {
         int depth = manager.getDepthManager().getMaxDepth() - 1;
-        System.out.println("controla posledni vrstvy " + depth);
         DepthRow row = manager.getDepthManager().getDepth(depth);
         for (int i = 0; i < BinaryTreeHelper.getCountElements(depth + 1); i++) {
             DepthRowNode node = row.getNodeElement(i);
@@ -92,13 +91,11 @@ public class RepairmanLayoutManager {
                 return;
             }
         }
-        System.err.println("ODEBRIAM VRSTVU");
         manager.getDepthManager().removeLastDepth();
     }
 
     private DepthRowNode getDepthRowNode(ElementInfo info) {
         if (info.getDepth() >= manager.getDepthManager().getMaxDepth()) {
-            System.err.println("PRIDAVAM VRSTVU");
             manager.getDepthManager().addDepth();
         }
         DepthRow row = manager.getDepthManager().getDepth(info.depth);
