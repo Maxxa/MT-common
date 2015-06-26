@@ -1,5 +1,6 @@
 package cz.commons.graphics;
 
+import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -16,16 +17,24 @@ public class RotationDirectionElement extends Parent {
     private final boolean isLeft;
     private Color color;
 
+    public RotationDirectionElement(int width,int height,boolean isLeft){
+        this(0,0,width,height,isLeft);
+    }
+
+    public RotationDirectionElement(int width,int height,boolean isLeft,Color color){
+        this(0,0,width,height,isLeft,color);
+    }
+
     public RotationDirectionElement(int x, int y,int width,int height,boolean isLeft){
         this(x,y,width,height,isLeft,Color.BLACK);
     }
+
     public RotationDirectionElement(int x, int y,int width,int height,boolean isLeft, Color color) {
         this.width = width;
         this.height = height;
         this.isLeft = isLeft;
         this.color = color;
-        setTranslateX(x);
-        setTranslateY(y);
+        setPoint(new Point2D(x,y));
         initPath();
         this.getChildren().addAll(path, pathArrow);
     }
@@ -70,6 +79,11 @@ public class RotationDirectionElement extends Parent {
 
     public void setColor(Color color){
         this.color=color;
+    }
+
+    public void setPoint(Point2D point){
+        setTranslateX(point.getX());
+        setTranslateY(point.getY());
     }
 
 }
